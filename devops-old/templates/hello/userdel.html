@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>user delete</title>
+</head>
+<body>
+<b><a href="{% url 'hello:index1' %}">返回</a></b>
+{% if msg %}
+    <h2>msg: {{msg.result}}, code: {{msg.code}}</h2><br>
+{% endif %}
+<form  method="post">
+    <b>删除用户{{user.user}}?</b><br>
+<!--    <a href="/hello/userdel/{{user.id}}/delete=True">Yes</a>/<a href="/hello/userlist/">No</a>-->
+    <input type="radio" name="delete" value='True'>是<input type="radio" name="delete" value='False' checked>否
+    <input type="submit" value="确认">
+</form>
+</body>
+</html>

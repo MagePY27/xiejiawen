@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-
+8" />
+<title>DevOps</title>
+<head>
+<body>
+<p> {{ classname }} </p>          {# 接受视图中的⼀一般变量量值 #}
+<li>{{ books.0 }}</li>       {# 接受列列表中的值 #}
+<li>{{ books.1 }}</li>
+<li>{{ books.2 }}</li>
+{# 接受字典中的定义的值 #}
+<div color = blue>hello my name is {{ user.name }} </br>
+ my age is {{ user.age }}
+
+<p>this is "devops/templates/hello/hello.html"</p>
+</div>
+
+
+{# if 标签使⽤用，判断 user 是否存在 #}
+
+{% if user %}
+   <p> name:{{ user.name }}  </p>
+{%else%}
+    用户不存在
+{% endif %}
+{# for 循环标签，渲染 books 列列表 #}
+
+{% for book in books %}
+    <li>{{ book }}</li>
+{% endfor %}
+{# for 循环输出列列表嵌套字典数据 #}
+
+{% for user in userlist  %}
+    <li>{{ user.name }}-->{{ user.age }}</li>
+{% endfor %}
+</body>
+</html>>

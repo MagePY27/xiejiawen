@@ -1,0 +1,31 @@
+<!--
+继承母版不变的部分
+ -->
+{% extends "base.html" %}
+<!--
+重写母版变的部分
+-->
+{% block title %} 用户的列表  {% endblock %}
+<!--
+重写母版变的部分
+-->
+{% block content %}
+<table border="1">
+<thead>
+    <tr>
+        <th>用户名 </th>
+        <th>姓名</th>
+        <th>年龄 </th>
+    </tr>
+</thead>
+<tbody>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.username }}</td>
+        <td>{{ user.user_cname }}</td>
+        <td>{{ user.age }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endblock %}

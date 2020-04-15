@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>自动化运维平台 </title>
+</head>
+<body>
+<!--
+每个⻚面都有个标题且样式基本不会变，可以抽象出来。变的标题内容做成变量
+ -->
+<p style="background-color:yellow;">
+    {% block title %} ⽤用户列列表  {% endblock %}
+</p>
+<!--
+⻚面都内容往往是变化的这一块，做成变量即可
+ -->
+ {% block content %}
+ {% endblock %}
+<!--
+每个⻚面都有个底部且样式基本不会变，可以抽象出来
+
+ -->
+<p style="background-color:red;">版权所有：⻢哥教育 </p>
+</body>
+</html>

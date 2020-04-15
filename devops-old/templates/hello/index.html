@@ -1,0 +1,63 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+   <title>用户信息</title>
+
+<head>
+<body>
+{% extends "base.html" %}
+<!--
+重写母版变的部分
+-->
+{% block title %} 用户的列表  {% endblock %}
+<!--
+重写母版变的部分
+-->
+{% block content %}
+<table border="1">
+    <a href="{% url 'hello:index1' %}">主页 </a>
+    <a href="{% url 'hello:index2' %}">用户添加</a><br>
+{% if msg %}
+    <h2>msg: {{msg.result}}, code: {{msg.code}}</h2><br>
+{% endif %}
+
+
+    <form action="">
+        <input type="text" name="keyword" value="{{ keyword }}" placeholder="请输入关键字:">
+        <!--value需要带引号，不然搜索框内容显示异常-->
+        <button type="submit">搜索</button>
+    </form>
+
+<thead>
+    <tr>
+        <th>用户名 </th>
+        <th>姓名 </th>
+        <th>密码 </th>
+        <th>年龄 </th>
+        <th>性别 </th>
+        <th>操作 </th>
+    </tr>
+</thead>
+<tbody>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.password }}</td>
+        <td>{{ user.age }}</td>
+<!--        <td>{{ user.get_sex_display }}</td>-->
+        <td>{% if user.sex == 0 %}女{% elif user.sex == 1 %}男{% else %}未知{% endif %}
+            <!-- 对数据库中的数据进行转换，0表示女，1表示男，其他表示未知> -->
+        </td>
+        <!-- <td><a href="/hello/userdel/{{user.id}}" id="del_user">删除</a>-->
+        <td>
+            <a href="{% url 'hello:index7' user.id %}">删除</a>
+            <a href="{% url 'hello:index6' user.id %}">修改</a>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endblock %}
+</body>
+</html>

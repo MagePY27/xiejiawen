@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户修改</title>
+</head>
+<body>
+<b><a href="{% url 'hello:index1' %}">返回</a></b>
+<form method="post" action="">
+    姓名:
+    <input type="text" name="name" value={{ user.name }}>
+    <br>
+    密码:
+    <input type="password" name="password" value={{ user.password }}>
+    <br>
+    年龄:
+    <input type="text" name="age" value={{ user.age }}>
+    <br>
+    性别:
+    {% if user.sex == 0 %}
+        <input type="radio" name="sex" value=0 checked>女
+        <input type="radio" name="sex" value=1 >男
+        <input type="radio" name="sex" value=2>未知<br>
+    {% elif user.sex == 1 %}
+        <input type="radio" name="sex" value=0 >女
+        <input type="radio" name="sex" value=1 checked>男
+        <input type="radio" name="sex" value=2>未知<br>
+    {% else %}
+        <input type="radio" name="sex" value=1>男
+        <input type="radio" name="sex" value=0>女
+        <input type="radio" name="sex" value=2 checked>未知<br>
+    {% endif %}
+        <button type="submit">确认</button>
+</form>
+</body>
+</html>
