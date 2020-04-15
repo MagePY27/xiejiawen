@@ -1,12 +1,21 @@
 <!DOCTYPE html>
-{% extends "base.html" %}
-
 <html lang="en">
-{% block title %}用户列表{% endblock %}
-{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+</head>
 <body>
-<form action="{% url 'hello:list' %}">
-    <input type="text" name="keyword" value="{{ keyword }}" placeholder="请输入关键字">
+{% extends "base.html" %}
+{% block title %} 用户管理系统
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'hello:useradd' %}">新增用户</a>
+<br>
+<br>
+
+<form action="{% url 'hello:userlist' %}">
+    <input type="text" name="keyword" value="{{ keyword }}" placeholder="请输入关键字~">
     <button type="submit">搜索</button>
 </form>
 
@@ -18,48 +27,22 @@
         <th>密码</th>
         <th>年龄</th>
         <th>性别</th>
-        <th>操作</th>
+        <th>管理</th>
     </tr>
 </thead>
 <tbody>
- {% for user in users %}
+    {% for user in users %}
     <tr>
         <td>{{ user.id }}</td>
         <td>{{ user.name }}</td>
         <td>{{ user.password }}</td>
         <td>{{ user.age }}</td>
-        <td>{% if user.sex == 0 %} 男 {% elif user.sex == 1 %}女 {%
-else %} 保密 {% endif %}</td>
-        <td>
-            <a href="{% url 'hello:usermod' user.id %}">更新 </a>
-            <a href="{% url 'hello:userdel' user.id %}">删除</a>
-         </td>
+        <td>{% if user.sex == 0 %}男 {% elif user.sex == 1 %}女 {% else %}未定义 {% endif %}</td>
+        <td><a href="{% url 'hello:userlist'%}">编辑</a>  <a href="{% url 'hello:userlist'%}">删除</a></td>
     </tr>
     {% endfor %}
 </tbody>
 </table>
-
-<form method="post" action="" >
-    姓名:
-    <input type="text" name="name" >
-    <br>
-    <br>
-    密码:
-    <input type="password" name="password">
-    <br>
-    <br>
-    年龄:
-    <input type="text" name="age">
-    <br>
-    <br>
-    性别:
-    <input type="radio" name="sex" value="0" checked>男
-    <input type="radio" name="sex" value="1">⼥女女
-    <br>
-    <br>
-    <button type="submit" >确定</button>
-    <button type="reset">重置</button>
-</form>
-{% endblock %
+{% endblock %}
 </body>
 </html>

@@ -5,6 +5,22 @@
     <title>用户删除</title>
 </head>
 <body>
-<h2>this is user del page</h2>
+{% extends "base.html" %}
+{% block title %} 用户管理系统
+{% endblock %}
+{% block content %}
+{% if msg.code == 0 %}
+    <p style="color:green">{{ msg.result }}</p>
+{% else %}
+    <p style="color:red">{{ msg.errmsg }}</p>
+{% endif %}
+<h3>确定要删除用户{{ object.name }}吗？？</h3>
+
+<form method="post">
+    <button type="submit">确定</button>
+    <button><a href="{% url 'hello:userlist' %}">取消</a></button>
+</form>
+{% endblock %}
 </body>
 </html>
+<a href="javascript:history.go(-1)" >backaaaaaa</a>

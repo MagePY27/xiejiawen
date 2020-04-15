@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>用户更新</title>
-</head>
-<body>
-<h2>this is user modefy page</h2>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+    <p style="background-color: aqua">用户修改</p>
+{% endblock %}
+
+{% block content %}
+    <form  method="post">
+        <input type="text" name="username" value="{{ user.username }}">
+        <input type="text" name="password" value="{{ user.password }}">
+        <input type="text" name="age" value="{{ user.age }}">
+        <input type="text" name="sex" value="{{ user.get_sex_display }}">
+        <input type="hidden" name="id" value="{{ user.id }}">
+        <input type="submit" value="提交">
+    </form>
+{% endblock %}
