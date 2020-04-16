@@ -82,7 +82,7 @@ class IndexView3(ListView):
     """
     #http://ip/hello/index3/?keyword=kk
     # template_name = 'hello/index.html' #制定模版文件，可不写
-    model = User #object_lsit = User.objects.all()
+    model = User #object_list = User.objects.all()
     context_object_name = "users" #自定义传给前端的变量,index.html中使用的变量名为users因此此处为users
     keyword = ""                   #或者不用改名，前端使用object_list变量也可以接收数据
 

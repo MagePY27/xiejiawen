@@ -11,6 +11,7 @@
 
 {% block content %}
 
+<a href="{% url 'hello:userlist' %}">返回</a>
 {% if msg.code == 0 %}
     <p style="color:green">{{ msg.result }}</p>
 {% else %}

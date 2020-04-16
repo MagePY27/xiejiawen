@@ -14,11 +14,11 @@
 {% else %}
     <p style="color:red">{{ msg.errmsg }}</p>
 {% endif %}
-<h3>确定要删除用户{{ object.name }}吗？？</h3>
+<h3>确定要删除用户{{ user.name }}吗？？</h3>
 
 <form method="post">
-    <button type="submit">确定</button>
-    <button><a href="{% url 'hello:userlist' %}">取消</a></button>
+    <input type="radio" name="delete" value='True'>是<input type="radio" name="delete" value='False' checked>否
+    <input type="submit" value="确认">
 </form>
 {% endblock %}
 </body>

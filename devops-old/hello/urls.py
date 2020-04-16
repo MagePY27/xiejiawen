@@ -21,8 +21,8 @@ urlpatterns = [
     # path('list/', views.list, name='list'),
     path('userlist/', views.userlist, name = 'userlist'),
     path('useradd/', views.useradd, name = 'useradd'),
-    re_path('userdel/(?P<user_id>[0-9]{1,})', views.userdel, name='userdel'), #name命名空间
-    re_path('usermod/(?P<user_id>[0-9]{1,})', views.usermod, name='usermodefy'),
+    re_path('userdel/(?P<pk>[0-9]{1,})', views.userdel, name='userdel'), #name命名空间
+    re_path('usermod/(?P<pk>[0-9]{1,})', views.usermod, name='usermodefy'),
 
     # FBV实现增删改查
     # path('index/', views2.index, name='index'),
