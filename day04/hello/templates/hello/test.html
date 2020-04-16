@@ -1,0 +1,44 @@
+<html>
+ <head>
+    <title>马哥教育 </title>
+ </head>
+ <body>
+
+ {% if form %}
+     {{ form.errors }}
+ {% endif %}
+
+ <form method="post" action=""  enctype="multipart/form-data">
+     <input type="hidden" name="ID" value="100">
+     姓名:
+     <input type="text" name="name" value="">
+     <br>
+     <br>
+     手机:
+     <input type="text" name="phone" value="">
+     <br>
+     <br>
+     技能:
+         <select name="skill">
+             <option value="1" selected>Python</option>
+             <option value="2">Java</option>
+             <option value="3">PHP</option>
+             <option value="4">Javascript</option>
+         </select>
+     <br>
+     <br>
+     个人简介 :
+        <textarea rows="3" cols="20" name="info" value="默认显示的内容">
+        </textarea>
+     <br>
+     <br>
+     文件上传：
+     <input type="file" name="file">
+     <br>
+     <br>
+     <input type="submit" name="save" value="确定">
+     <input type="reset" name="reset" value="重置">
+</form>
+
+</body>
+</html>
