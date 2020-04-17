@@ -20,11 +20,11 @@
 
     <form  method="post" action="" enctype="multipart/form-data">
         姓名:<br>
-        <input type="text" name="name" value="{{ user.name }}"><br>
+        <input type="text" name="name" value={{ user.name }}><br>
         密码:<br>
-        <input type="password" name="password" value="{{ user.password }}"><br>
+        <input type="password" name="password" value={{ user.password }}><br>
         年龄:<br>
-        <input type="text" name="age" value="{{ user.age }}"><br>
+        <input type="text" name="age" value={{ user.age }}><br>
         性别:<br>
         {% if user.sex == 0 %}
         <input type="radio" name="sex" value=0 checked>女
