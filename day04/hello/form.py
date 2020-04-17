@@ -34,6 +34,7 @@ class UserForm(forms.Form):
 
     def clean_name(self):
         name = self.cleaned_data['name']
+        print(self.cleaned_data)
         num_name = len(name.strip())
         if not name:
             raise forms.ValidationError('name is Required Field!')

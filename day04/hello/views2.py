@@ -83,7 +83,7 @@ class UserDelFormView(TemplateView):
                 msg = {"code": 1, "result": "删除取消"}
                 return render(request, 'hello/userlist.html', {"users": users, "msg": msg})
         except Exception as e:
-            msg = {"code": 2, "errmsg": "删除失败，删除过程异常或用户不存在！%s" % traceback.format_exc()}
+            msg = {"code": 2, "errmsg": "删除失败，删除过程异常或用户不存在"}
         return render(request, 'hello/userdel.html', {"user": kwargs.get('pk'), "msg": msg})
 
 class UserModFormView(TemplateView):
