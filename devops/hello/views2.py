@@ -63,6 +63,7 @@ class UserDelView(TemplateView, View):
 
     def post(self,request, **kwargs):
         users = User.objects.all()
+        msg={}
         try:
             if request.POST.get('delete') == "True":
                 User.objects.get(pk=kwargs['pk']).delete()
@@ -102,4 +103,4 @@ class UserModView(TemplateView, View):
             #修改成功返回至主页面
         except:
             msg = {"code": 1, "errmsg": "更新用户失败: %s" % traceback.format_exc()}
-        return render(request, 'hello/usermod.html', {"msg": msg, "user": pk})
+        return render(request, 'hello/usermod.html', {"msg": msg, "user": user})

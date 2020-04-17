@@ -1,13 +1,19 @@
 from django import forms
-#原生表单验证各种表单类型以及自定义
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
+
+# 原生表单验证各种表单类型以及自定义
+
 
 class UserForm(forms.Form):
     name = forms.CharField(max_length=12, required=True)
-    phone = forms.CharField(max_length=11, required=False)
-    # age = forms.IntegerField(max_value=100, required=False)
-    skill = forms.CharField(max_length=10, required=False)
-    file = forms.FileField()
-    info = forms.CharField(max_length=100, required=True)
+    password = forms.CharField(min_length=8,  max_length=16, required=True)
+    # phone = forms.CharField(max_length=11, required=False)
+    age = forms.IntegerField(max_value=100, required=False)
+    sex = forms.IntegerField(required=False)
+    # skill = forms.CharField(max_length=10, required=False)
+    # file = forms.FileField()
+    # info = forms.CharField(max_length=100, required=True)
 
     #自定义验证格式， clean_字段
     """
@@ -17,11 +23,44 @@ class UserForm(forms.Form):
     本例中，在必填CharField这个校验逻辑之后， 因为字段数据已被部分处理，所以它被从self.cleaned_data
     中提取出来，同样我们不必担心数据是否为空，因为它已被校验过了。
     """
-    def clean_info(self):
-        print(self.cleaned_data)
-        info = self.cleaned_data['info']
-        num_info = len(info.strip())
-        print("info长度为:", num_info)
-        if num_info < 4:
-            raise forms.ValidationError('info too short')
-        return info
+    # def clean_info(self):
+    #     print(self.cleaned_data)
+    #     info = self.cleaned_data['info']
+    #     num_info = len(info.strip())
+    #     print("info长度为:", num_info)
+    #     if num_info < 4:
+    #         raise forms.ValidationError('info too short')
+    #     return info
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        num_name = len(name.strip())
+        if not name:
+            raise forms.ValidationError('name is Required Field!')
+        if num_name > 12:
+            raise forms.ValidationError('name is too long')
+        return name
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        num_password = len(password.strip())
+        if not password:
+            raise forms.ValidationError('password is Required Field!')
+        if num_password < 8 or num_password >16:
+            raise forms.ValidationError('password is longer than 16 or shorter than 8')
+        # return "密码长度为:{}".format(password)
+        return password
+
+    def clean_age(self):
+        age = self.cleaned_data['age']
+        if not age:
+            age=18
+        elif int(age) > 100 or int(age) < 0:
+                raise forms.ValidationError('invalid age format!')
+        # return "年龄为:{}".format(age)
+        return age
+
+    def clean_sex(self):
+        sex = self.cleaned_data['sex']
+        return sex
+

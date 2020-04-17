@@ -1,0 +1,57 @@
+<html>
+<body>
+{% extends "base.html" %}
+{% block title %} 用户管理系统
+{% endblock %}
+
+
+{% block content %}
+{% if msg.code == 0 %}
+    <p style="color:green">{{ msg.result }}</p>
+{% else %}
+    <p style="color:red">{{ msg.errmsg }}</p>
+{% endif %}
+
+ {% if form %}
+     {{ form.errors }}
+ {% endif %}
+
+<a href="{% url 'hello:userlistFormview' %}">主页 </a>
+<a href="{% url 'hello:useraddFormview' %}">新增用户</a>
+<br>
+<br>
+
+<form method="post" action="" enctype="multipart/form-data">
+<!--    #方法为post，后端接收-->
+    <input type="text" name="keyword" value="{{ keyword }}" placeholder="请输入关键字~">
+    <button type="submit">搜索</button>
+</form>
+
+<table border="1">
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>姓名</th>
+        <th>密码</th>
+        <th>年龄</th>
+        <th>性别</th>
+        <th>管理</th>
+    </tr>
+</thead>
+<tbody>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.password }}</td>
+        <td>{{ user.age }}</td>
+        <td>{% if user.sex == 0 %}男 {% elif user.sex == 1 %}女 {% else %}未定义 {% endif %}</td>
+        <td><a href="{% url 'hello:usermodFormview' user.id %}">编辑</a>  <a href="{% url 'hello:userdelFormview' user.id %}">删除</a></td>
+<!--        传参给后端页面-->
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endblock %}
+</body>
+</html>

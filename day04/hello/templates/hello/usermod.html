@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}
+    <p style="background-color: aqua">用户修改</p>
+{% endblock %}
+
+
+{% block content %}
+
+ {% if form %}
+     {{ form.errors }}
+ {% endif %}
+
+{% if msg.code == 0 %}
+    <p style="color:green">{{ msg.result }}</p>
+{% else %}
+    <p style="color:red">{{ msg.errmsg }}</p>
+{% endif %}
+
+<h2><a href="{% url 'hello:userlistFormview' %}">返回 </a></h2>
+
+    <form  method="post" action="" enctype="multipart/form-data">
+        姓名:<br>
+        <input type="text" name="姓名" value="{{ user.name }}"><br>
+        密码:<br>
+        <input type="password" name="password" value="{{ user.password }}"><br>
+        年龄:<br>
+        <input type="text" name="age" value="{{ user.age }}"><br>
+        性别:<br>
+        <input type="text" name="sex" value="{{ user.sex }}"><br><br>
+        <input type="submit" value="提交">
+    </form>
+{% endblock %}

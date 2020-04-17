@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户删除</title>
+</head>
+<body>
+{% extends "base.html" %}
+{% block title %} 用户管理系统
+{% endblock %}
+{% block content %}
+{% if msg.code == 0 %}
+    <p style="color:green">{{ msg.result }}</p>
+{% else %}
+    <p style="color:red">{{ msg.errmsg }}</p>
+{% endif %}
+<h3>确定要删除吗？？</h3>
+ {% if form %}
+     {{ form.errors }}
+ {% endif %}
+<form method="post">
+    <input type="radio" name="delete" value='True'>是<input type="radio" name="delete" value='False' checked>否
+    <input type="submit" value="确认">
+</form>
+{% endblock %}
+</body>
+</html>
