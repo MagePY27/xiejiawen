@@ -11,7 +11,6 @@ import traceback, logging
 
 logger = logging.getLogger("devops")
 
-
 class UserListFormView(ListView):
     """
     1.用户列表：支持搜索
@@ -25,8 +24,8 @@ class UserListFormView(ListView):
         queryset = super(UserListFormView, self).get_queryset()
         self.keyword = self.request.GET.get('keyword', '').strip()
         if self.keyword:
-            # Q模块实现多条件搜索过滤
-            queryset = queryset.filter(Q(name__icontains=self.keyword)) | \
+            #Q模块实现多条件搜索过滤
+            queryset = queryset.filter(Q(name__icontains=self.keyword))|\
                        (Q(phone__icontains=self.keyword))
         return queryset
 
@@ -38,7 +37,6 @@ class UserListFormView(ListView):
     """
     用户创建
     """
-
     def post(self, request):
         userForm = UserModelForm(request.POST)
         if userForm.is_valid():
@@ -54,12 +52,11 @@ class UserListFormView(ListView):
                 logger.error("create user error: %s" % traceback.format_exc())
                 res = {"code": 1, "errmsg": "添加用户失败"}
         else:
-            # 获取自定义表单错误的两种方式
+            #获取自定义表单错误的两种方式
             print(userForm.errors)
             print(userForm.errors.as_json())
             res = {"code": 1, "errmsg": userForm.errors}
         return render(request, settings.JUMP_PAGE, res)
-
 
 class UserAddFormView(TemplateView):
     """
@@ -101,7 +98,7 @@ class UserDetailFormView(DetailView):
                 res = {"code": 0, "msg": "更新用户成功"}
             except:
                 res = {"code": 1, "errmsg": "用户更细你失败"}
-                logger.error("update user error %s " % traceback.format_exc())
+                logger.error("update user error %s " % traceback.format_exc() )
         else:
             # 获取所有的表单错误
             print(userForm.errors)
