@@ -1,0 +1,10 @@
+{% extents 'base.html' %}
+
+{% block content %}
+    {% if code == 0 %}
+        <h1>{{ result }}</h1>
+    {% else %}
+        <h1>操作失败</h1><br>
+        <h3>{{ errmsg }}</h3>
+    {% endif %}
+{% endblock %}

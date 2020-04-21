@@ -24,18 +24,18 @@ from hello.models import User
 class UserListFormView(View):
     model = User
 
-    def get(self, request):
+    def get(self, request): #请求到来时，返回用户主页
         users = User.objects.all()
         return render(request, 'hello/userlist.html', {"users": users})
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs): #获取数据库数据，同主页一同返回
         print(kwargs)
         # print(UserForm.__dict__)
         context = super(UserListFormView, self).get_context_data(**kwargs)
         context["users"] = User.objects.filter(**kwargs)
         return context
 
-    def post(self, request):
+    def post(self, request): #用户姓名搜索框
         keyword = request.POST.get("keyword", "")
         users = User.objects.all()
         if keyword:
@@ -44,10 +44,10 @@ class UserListFormView(View):
 
 
 class UserAddFormView(View):
-    def get(self, request):
+    def get(self, request): #请求到来，返回页面
         return render(request, 'hello/useradd.html')
 
-    def post(self, request):
+    def post(self, request): #数据提交，提交前会进行表单验证，通过后才会提交给后端
         form = UserForm(request.POST)
         print("表单已验证，即将判断表单是否合法~")
         if form.is_valid():
@@ -75,7 +75,7 @@ class UserDelFormView(TemplateView):
         form = UserForm(request.POST)
         print(form)
         try:
-            if request.POST.get("delete") == "True":
+            if request.POST.get("delete") == "True": #接收前端返回值，True才删除
                 User.objects.get(pk=kwargs['pk']).delete()
                 msg = {"code": 0, "result": "删除成功"}
                 return render(request, 'hello/userlist.html', {"users": users, "msg": msg})
@@ -96,7 +96,7 @@ class UserModFormView(TemplateView):
         context["user"] = user
         return context
 
-    def post(self, request, **kwargs):
+    def post(self, request, **kwargs): #表单验证，验证无误后提交更新
         form = UserForm(request.POST)
         try:
             if form.is_valid():

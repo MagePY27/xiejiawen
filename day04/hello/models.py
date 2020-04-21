@@ -9,6 +9,7 @@ class User(models.Model):
     )
     name = models.CharField(max_length=20, help_text='姓名')
     password = models.CharField(max_length=20, help_text='密码')
+    # phone = models.CharField(max_length=11, help_text='手机')
     age = models.IntegerField(help_text='年龄', null=True, blank=True)
     sex = models.IntegerField(choices=SEX, null=True, blank=True)
 
