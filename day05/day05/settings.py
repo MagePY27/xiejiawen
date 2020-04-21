@@ -124,4 +124,4 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-JUMP_PAGR='jump.html'
+JUMP_PAGE='jump.html'
