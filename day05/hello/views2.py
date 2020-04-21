@@ -19,10 +19,11 @@ class UserListFormView(ListView):
     template_name = 'hello/userlist.html'
     context_object_name = "users"
     keyword = ""
-
+    print("hello world=============")
     def get_queryset(self):
         queryset = super(UserListFormView, self).get_queryset()
         self.keyword = self.request.GET.get('keyword', '').strip()
+        print("hello world 22222222222222222222")
         if self.keyword:
             #Q模块实现多条件搜索过滤
             queryset = queryset.filter(Q(name__icontains=self.keyword))|\
