@@ -1,15 +1,16 @@
-from django.http import HttpResponse, Http404, JsonResponse, QueryDict
-from django.shortcuts import render_to_response, render, reverse
+from django.shortcuts import render, reverse
+from django.http import JsonResponse, QueryDict
 from django.views.generic import TemplateView, ListView, DetailView
 from django.db.models import Q
-
 from hello.models import User
 from hello.form import UserModelForm, UserUpdateModelForm
 from django.conf import settings
+import traceback, logging
 
 import traceback, logging
 
 logger = logging.getLogger("devops")
+
 
 class UserListFormView(ListView):
     """
@@ -19,18 +20,17 @@ class UserListFormView(ListView):
     template_name = 'hello/userlist.html'
     context_object_name = "users"
     keyword = ""
-    print("hello world=============")
+
     def get_queryset(self):
         queryset = super(UserListFormView, self).get_queryset()
         self.keyword = self.request.GET.get('keyword', '').strip()
-        print("hello world 22222222222222222222")
         if self.keyword:
-            #Q模块实现多条件搜索过滤
-            queryset = queryset.filter(Q(name__icontains=self.keyword))|\
-                       (Q(phone__icontains=self.keyword))
+            # Q模块实现多条件搜索过滤
+            queryset = queryset.filter(Q(name__icontains=self.keyword)
+                                       | Q(phone__icontains=self.keyword))
         return queryset
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):# 把关键词保留在输入框
         context = super(UserListFormView, self).get_context_data(**kwargs)
         context["keyword"] = self.keyword
         return context
@@ -49,7 +49,7 @@ class UserListFormView(ListView):
                 # 方案二：调用源码自带的save方法入库
                 userForm.save()
                 res = {"code": 0, "result": "添加用户成功"}
-            except:
+            except Exception as e:
                 logger.error("create user error: %s" % traceback.format_exc())
                 res = {"code": 1, "errmsg": "添加用户失败"}
         else:
@@ -58,6 +58,7 @@ class UserListFormView(ListView):
             print(userForm.errors.as_json())
             res = {"code": 1, "errmsg": userForm.errors}
         return render(request, settings.JUMP_PAGE, res)
+
 
 class UserAddFormView(TemplateView):
     """
@@ -71,12 +72,18 @@ class UserDetailFormView(DetailView):
     用户详情
     """
     model = User
-    template_name = 'user/usermod.html'
+    template_name = 'hello/usermod.html'
     context_object_name = "user"
 
     """
     更新用户信息
     """
+
+    # def get_context_data(self, **kwargs):
+    #     print(**kwargs)
+    #     context = super(UserDetailFormView, self).get_context_data(**kwargs)
+    #     context["user"] = User.objects.filter(pk=kwargs.get('pk'))
+    #     return context
 
     def post(self, request, **kwargs):
         pk = kwargs.get('pk')
@@ -98,7 +105,7 @@ class UserDetailFormView(DetailView):
                 userForm.save()
                 res = {"code": 0, "msg": "更新用户成功"}
             except:
-                res = {"code": 1, "errmsg": "用户更细你失败"}
+                res = {"code": 1, "errmsg": "用户更新失败"}
                 logger.error("update user error %s " % traceback.format_exc() )
         else:
             # 获取所有的表单错误
@@ -106,21 +113,30 @@ class UserDetailFormView(DetailView):
             res = {"code": 1, "errmsg": userForm.errors}
         return render(request, settings.JUMP_PAGE, res)
 
-    """
-    删除用户：delete method 浏览器无法复现，使用curl测试，或postman
-    curl -X DELETE "http://IP:PORT/hello/userdetailformview/2/"        
-    """
 
-    def delete(self, request, **kwargs):
-        # pk = kwargs.get('pk')
-        try:
-            # self.model.objects.filter(pk=pk).delete()
-            self.get_object().delete()
-            res = {"code": 0, "msg": "用户删除成功"}
-        except:
-            logger.error("delete user error %s " % traceback.format_exc())
-            res = {"code": 1, "msg": "用户删除失败"}
-        return JsonResponse(res, safe=True)
+class UserDelFormView(DetailView):
+    """
+    删除用户
+    """
+    model = User
+    template_name = 'hello/userdel.html'
+    context_object_name = "user"
+
+    def post(self, request, **kwargs):
+        if request.POST.get('delete') == "True":
+            try:
+                User.objects.get(pk=kwargs['pk']).delete()
+                # self.get_object().delete()
+                res = {"code": 0, "msg": "用户删除成功"}
+            except Exception as e:
+                logger.error("delete user error %s " % traceback.format_exc())
+                res = {"code": 1, "errmsg": "用户删除失败"}
+        elif request.POST.get('delete') == "False":
+            res = {"code": 2, "errmsg": "用户已取消删除操作"}
+        else:
+            res = {"code": 3, "errmsg": "其他异常"}
+        return render(request, settings.JUMP_PAGE, res)
+
 
 
 

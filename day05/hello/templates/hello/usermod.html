@@ -1,46 +1,46 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block title %}
-    <p style="background-color: aqua">用户修改</p>
+    <p style="background-color: aqua">用户更新</p>
 {% endblock %}
 
 
 {% block content %}
 
- {% if form %}
-     {{ form.errors }}
- {% endif %}
+<!-- {% if form %}-->
+<!--     {{ form.errors }}-->
+<!-- {% endif %}-->
 
-{% if msg.code == 0 %}
-    <p style="color:green">{{ msg.result }}</p>
-{% else %}
-    <p style="color:red">{{ msg.errmsg }}</p>
-{% endif %}
+<!--{% if msg.code == 0 %}-->
+<!--    <p style="color:green">{{ msg.result }}</p>-->
+<!--{% else %}-->
+<!--    <p style="color:red">{{ msg.errmsg }}</p>-->
+<!--{% endif %}-->
 
 <h2><a href="{% url 'hello:userlistFormview' %}">返回 </a></h2>
 
     <form  method="post" action="">
         姓名:<br>
-        <input type="text" name="name" value={{ user.name }}><br>
+        <input type="text" name="name" value="{{ user.name }}"><br>
         手机:<br>
-        <input type="text" name="phone" value={{ user.phone }}>
+        <input type="text" name="phone" value="{{ user.phone }}"><br>
         年龄:<br>
-        <input type="text" name="age" value={{ user.age }}><br>
+        <input type="text" name="age" value="{{ user.age }}"><br>
         密码:<br>
         <input type="password" name="password" value=""><br>
         再次输入:<br>
         <input type="password" name="confirm_password" value=""><br>
         性别:<br>
         {% if user.sex == 0 %}
-        <input type="radio" name="sex" value=0 checked>女
-        <input type="radio" name="sex" value=1 >男
+        <input type="radio" name="sex" value=0 checked>男
+        <input type="radio" name="sex" value=1 >女
         <input type="radio" name="sex" value=2>保密<br>
         {% elif user.sex == 1 %}
-        <input type="radio" name="sex" value=0 >女
-        <input type="radio" name="sex" value=1 checked>男
+        <input type="radio" name="sex" value=0 >男
+        <input type="radio" name="sex" value=1 checked>女
         <input type="radio" name="sex" value=2>保密<br>
         {% else %}
-        <input type="radio" name="sex" value=1>男
-        <input type="radio" name="sex" value=0>女
+        <input type="radio" name="sex" value=0>男
+        <input type="radio" name="sex" value=1>女
         <input type="radio" name="sex" value=2 checked>保密<br>
         {% endif %}
         <br><br>

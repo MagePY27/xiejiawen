@@ -1,15 +1,12 @@
-<html>
-<body>
-{% extents 'base.html'%}
-{% block title %}用户管理系统
-{% endblock %}
+{% extends "base.html" %}
+{% block title %} 用户管理系统 {% endblock %}
 
 {% block content %}
-{% if msg.code == 0 %}
-    <p style="color:green">{{ msg.result }}</p>
-{% else %}
-    <p style="color:red">{{ msg.errmsg }}</p>
-{% endif %}
+<!--{% if msg.code == 0 %}-->
+<!--    <p style="color:green">{{ msg.result }}</p>-->
+<!--{% else %}-->
+<!--    <p style="color:red">{{ msg.errmsg }}</p>-->
+<!--{% endif %}-->
 <!--{% if form %}-->
 <!--    {{ form.errors }}-->
 <!--{% endif %}-->
@@ -19,7 +16,7 @@
 <br>
 <br>
 <!--搜索框-->
-<form method="post" action="{% url 'hello:userlistFormview' %}">
+<form action="{% url 'hello:userlistFormview' %}">
     <input type="text" name="keyword" value="{{ keyword }}" placeholder="请输入关键字:">
     <button type="submit">搜索</button>
 </form>
@@ -50,7 +47,7 @@
                 {% endif %}
             </td>
             <td>
-                <a href="{% url 'hello:usermodFormview' user.id %}">编辑 </a>
+                <a href="{% url 'hello:userdetailFormview' user.id %}">编辑 </a>
                 <a href="{% url 'hello:userdelFormview' user.id %}">删除</a>
             </td>
         </tr>
@@ -58,5 +55,3 @@
     </tbody>
 </table>
 {% endblock %}
-</body>
-</html>
