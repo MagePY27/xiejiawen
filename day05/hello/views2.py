@@ -5,9 +5,8 @@ from django.db.models import Q
 from hello.models import User
 from hello.form import UserModelForm, UserUpdateModelForm
 from django.conf import settings
-import traceback, logging
-
-import traceback, logging
+import traceback
+import logging
 
 logger = logging.getLogger("devops")
 
@@ -101,7 +100,7 @@ class UserDetailFormView(DetailView):
                 # self.model.objects.filter(pk=pk).update(**data)
 
                 # 方案二：通过modelform验证过的数据和save方法入库
-                print(userForm.cleaned_data)
+                print("haha:", userForm.cleaned_data)
                 userForm.save()
                 res = {"code": 0, "msg": "更新用户成功"}
             except:
