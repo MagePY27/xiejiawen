@@ -3,6 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>用户删除</title>
+    <script>
+        $("#is_delete").click(function(){
+            data = $("#userdel").serialize()
+            console.log(data)
+
+        $.ajax({
+            method: 'post',
+            url: '/hello/userdelformview',
+            data: data,
+            success: function(result){
+                console.log(result)
+
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 {% extends "base.html" %}
@@ -10,9 +26,9 @@
 {% endblock %}
 {% block content %}
 <h3>确定要删除吗？？</h3>
-<form method="post">
-    <input type="radio" name="delete" value='True'>是<input type="radio" name="delete" value='False' checked>否
-    <input type="submit" value="确认">
+<form id="userdel" method="post" >
+    <input type="radio" value='True' name="delete">是<input type="radio" name="delete" value='False' checked>否
+    <input type="submit" value="确认" id="is_delete">
 </form>
 {% endblock %}
 </body>
