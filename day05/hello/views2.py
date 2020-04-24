@@ -5,9 +5,8 @@ from django.db.models import Q
 from hello.models import User
 from hello.form import UserModelForm, UserUpdateModelForm
 from django.conf import settings
-import traceback, logging
-
-import traceback, logging
+import traceback
+import logging
 
 logger = logging.getLogger("devops")
 
@@ -53,18 +52,18 @@ class UserListFormView(ListView):
                 logger.error("create user error: %s" % traceback.format_exc())
                 res = {"code": 1, "errmsg": "添加用户失败"}
         else:
-            #获取自定义表单错误的两种方式
+            # 获取自定义表单错误的两种方式
             print(userForm.errors)
             print(userForm.errors.as_json())
             res = {"code": 1, "errmsg": userForm.errors}
         return render(request, settings.JUMP_PAGE, res)
 
 
-class UserAddFormView(TemplateView):
-    """
-    用户添加GET请求返回一个页面
-    """
-    template_name = 'hello/useradd.html'
+# class UserAddFormView(TemplateView):
+#     """
+#     用户添加GET请求返回一个页面
+#     """
+#     template_name = 'hello/useradd.html'
 
 
 class UserDetailFormView(DetailView):
@@ -101,7 +100,7 @@ class UserDetailFormView(DetailView):
                 # self.model.objects.filter(pk=pk).update(**data)
 
                 # 方案二：通过modelform验证过的数据和save方法入库
-                print(userForm.cleaned_data)
+                print("haha:", userForm.cleaned_data)
                 userForm.save()
                 res = {"code": 0, "msg": "更新用户成功"}
             except:
@@ -123,6 +122,8 @@ class UserDelFormView(DetailView):
     context_object_name = "user"
 
     def post(self, request, **kwargs):
+        print(request.body, request.POST)
+        print(request.POST.get('delete'))
         if request.POST.get('delete') == "True":
             try:
                 User.objects.get(pk=kwargs['pk']).delete()
@@ -137,6 +138,24 @@ class UserDelFormView(DetailView):
             res = {"code": 3, "errmsg": "其他异常"}
         return render(request, settings.JUMP_PAGE, res)
 
+
+class JsView(TemplateView):
+    """
+    添加用户
+    """
+    template_name = 'html/js.html'
+
+    def post(self, request, **kwargs):
+        print(request.body)
+        print(request.POST)
+        data = request.POST.dict()
+        if "_save" in data.keys():
+            data.pop("_save")
+            # print(data)
+        User.objects.create(**data)
+        res = {"code": 0, "msg": "添加用户成功"}
+        # return JsonResponse(res, safe=True)
+        return render(request, settings.JUMP_PAGE, res)
 
 
 

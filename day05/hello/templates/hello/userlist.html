@@ -12,11 +12,11 @@
 <!--{% endif %}-->
 
 <a href="{% url 'hello:userlistFormview' %}">主页</a>
-<a href="{% url 'hello:useraddFormview' %}">用户添加</a>
+<a href="{% url 'hello:js' %}">用户添加</a>
 <br>
 <br>
 <!--搜索框-->
-<form action="{% url 'hello:userlistFormview' %}">
+<form id="search_user_or_phone" action="{% url 'hello:userlistFormview' %}">
     <input type="text" name="keyword" value="{{ keyword }}" placeholder="请输入关键字:">
     <button type="submit">搜索</button>
 </form>
