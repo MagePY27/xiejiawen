@@ -92,9 +92,9 @@ class UserUpdateModelForm(forms.ModelForm):
     def clean_password(self):
         password = self.cleaned_data['password']
         print("form_password:", self.cleaned_data)
-        num_password = len(password.strip())
         if not password:
             raise forms.ValidationError('password is Required Field!')
+        num_password = len(password.strip())
         if num_password < 8 or num_password > 16:
             raise forms.ValidationError('password is longer than 16 or shorter than 8')
         # return "密码长度为:{}".format(password)
@@ -102,14 +102,18 @@ class UserUpdateModelForm(forms.ModelForm):
 
     def clean_confirm_password(self):
         print("form_confirm_password", self.cleaned_data)
-        if not self.cleaned_data.get('password'):
-            raise forms.ValidationError('密码格式不合法')
+        if "password" in self.cleaned_data.keys():
+            if "confirm_password" in self.cleaned_data.keys():
+                pass
+            else:
+                raise forms.ValidationError('密码框不能为空')
         else:
-            password = self.cleaned_data['password']
-            confirm_password = self.cleaned_data['confirm_password']
-            if password != confirm_password:
-                raise forms.ValidationError('两次输入的密码不一致', code="password_mismatch")
-            return confirm_password
+            raise forms.ValidationError('密码框不能为空')
+        password = self.cleaned_data['password']
+        confirm_password = self.cleaned_data['confirm_password']
+        if password != confirm_password:
+            raise forms.ValidationError('两次输入的密码不一致', code="password_mismatch")
+        return confirm_password
 
     def clean_age(self):
         age = self.cleaned_data['age']
