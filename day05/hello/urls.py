@@ -8,5 +8,6 @@ urlpatterns = [
     path('useraddformview/', views2.UserAddFormView, name='useraddFormview'),
     re_path('userdetailformview/(?P<pk>[0-9]{1,})?', views2.UserDetailFormView, name='userdetailFormview'),
     # re_path('usermodformview/(?P<pk>[0-9]{1,})?', views2.UserModFormView, name='usermodFormview'),
-
+    
+    path('js/', views2.JsView.as_view(), name='js'),
 ]
