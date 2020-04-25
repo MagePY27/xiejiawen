@@ -128,4 +128,4 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-JUMP_PAGE='jump.html'
+JUMP_PAGE = 'jump.html'

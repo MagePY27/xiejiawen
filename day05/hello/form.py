@@ -1,4 +1,6 @@
 from django import forms
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
 from hello.models import User
 import re
 
@@ -34,8 +36,6 @@ class UserModelForm(forms.ModelForm):
         # fields = ['name', 'password', 'age']
 
     # 对字段进行二次验证
-
-
     def clean_phone(self):
         """
         通过正则表达式验证手机号是否合法
@@ -50,17 +50,6 @@ class UserModelForm(forms.ModelForm):
             raise forms.ValidationError("手机号非法", code='invalid')
 
 
-    def clean_password(self):
-        password = self.cleaned_data['password']
-        num_password = len(password.strip())
-        if not password:
-            raise forms.ValidationError('password is Required Field!')
-        if num_password < 8 or num_password > 16:
-            raise forms.ValidationError('password is longer than 16 or shorter than 8')
-        # return "密码长度为:{}".format(password)
-        return password
-
-
 class UserUpdateModelForm(forms.ModelForm):
     # 密码确认字段，model里不存在，此处要加上去
     confirm_password = forms.CharField(required=True)
@@ -69,61 +58,61 @@ class UserUpdateModelForm(forms.ModelForm):
         model = User
         fields = ['name', 'password', 'phone', 'age', 'sex']
 
-    def clean_phone(self):
-        phone = self.cleaned_data['phone']
-        phone_regex = r'^1[3578][0-9]{9}$'
-        p = re.compile(phone_regex)
-        if p.match(phone):
-            return phone
-        else:
-            # 自定义表单错误
-            raise forms.ValidationError("手机号非法", code='invalid')
-
-    def clean_name(self):
-        name = self.cleaned_data['name']
-        print("后端", self.cleaned_data)
-        num_name = len(name.strip())
-        if not name:
-            raise forms.ValidationError('name is Required Field!')
-        if num_name > 12:
-            raise forms.ValidationError('name is too long')
-        return name
-
-    def clean_password(self):
-        password = self.cleaned_data['password']
-        print("form_password:", self.cleaned_data)
-        if not password:
-            raise forms.ValidationError('password is Required Field!')
-        num_password = len(password.strip())
-        if num_password < 8 or num_password > 16:
-            raise forms.ValidationError('password is longer than 16 or shorter than 8')
-        # return "密码长度为:{}".format(password)
-        return password
-
-    def clean_confirm_password(self):
-        print("form_confirm_password", self.cleaned_data)
-        if "password" in self.cleaned_data.keys():
-            if "confirm_password" in self.cleaned_data.keys():
-                pass
+        def clean_phone(self):
+            phone = self.cleaned_data['phone']
+            phone_regex = r'^1[3578][0-9]{9}$'
+            p = re.compile(phone_regex)
+            if p.match(phone):
+                return phone
             else:
-                raise forms.ValidationError('密码框不能为空')
-        else:
-            raise forms.ValidationError('密码框不能为空')
-        password = self.cleaned_data['password']
-        confirm_password = self.cleaned_data['confirm_password']
-        if password != confirm_password:
-            raise forms.ValidationError('两次输入的密码不一致', code="password_mismatch")
-        return confirm_password
+                # 自定义表单错误
+                raise forms.ValidationError("手机号非法", code='invalid')
 
-    def clean_age(self):
-        age = self.cleaned_data['age']
-        if not age:
-            age = 18
-        elif int(age) > 100 or int(age) < 0:
-            raise forms.ValidationError('invalid age format!')
-        # return "年龄为:{}".format(age)
-        return age
+        def clean_confirm_password(self):
+            password = self.cleaned_data['password']
+            confirm_password = self.cleaned_data['confirm_password']
+            if password != confirm_password:
+                raise forms.ValidationError('两次输入的密码不一致', code="password_mismatch")
+            return confirm_password
 
-    def clean_sex(self):
-        sex = self.cleaned_data['sex']
-        return sex
+    # def clean_info(self):
+    #     print(self.cleaned_data)
+    #     info = self.cleaned_data['info']
+    #     num_info = len(info.strip())
+    #     print("info长度为:", num_info)
+    #     if num_info < 4:
+    #         raise forms.ValidationError('info too short')
+    #     return info
+
+    # def clean_name(self):
+    #     name = self.cleaned_data['name']
+    #     print(self.cleaned_data)
+    #     num_name = len(name.strip())
+    #     if not name:
+    #         raise forms.ValidationError('name is Required Field!')
+    #     if num_name > 12:
+    #         raise forms.ValidationError('name is too long')
+    #     return name
+    #
+    # def clean_password(self):
+    #     password = self.cleaned_data['password']
+    #     num_password = len(password.strip())
+    #     if not password:
+    #         raise forms.ValidationError('password is Required Field!')
+    #     if num_password < 8 or num_password >16:
+    #         raise forms.ValidationError('password is longer than 16 or shorter than 8')
+    #     # return "密码长度为:{}".format(password)
+    #     return password
+    #
+    # def clean_age(self):
+    #     age = self.cleaned_data['age']
+    #     if not age:
+    #         age=18
+    #     elif int(age) > 100 or int(age) < 0:
+    #             raise forms.ValidationError('invalid age format!')
+    #     # return "年龄为:{}".format(age)
+    #     return age
+    #
+    # def clean_sex(self):
+    #     sex = self.cleaned_data['sex']
+    #     return sex
