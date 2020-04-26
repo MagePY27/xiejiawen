@@ -2,18 +2,17 @@
 {% block title %} 创建用户 {% endblock %}
 
 {% block content %}
-<!-- {% if form %}-->
-<!--    <p style="color:red">{{ form.errors }}</p>-->
-<!-- {% endif %}-->
-
+ {% if form %}
+    {{ form.errors }}
+ {% endif %}
 <a href="{% url 'hello:userlistFormview' %}">返回</a>
-<!--{% if msg.code == 0 %}-->
-<!--    <p style="color:green">{{ msg.result }}</p>-->
-<!--{% else %}-->
-<!--    <p style="color:red">{{ msg.errmsg }}</p>-->
-<!--{% endif %}-->
+{% if msg.code == 0 %}
+    <p style="color:green">{{ msg.result }}</p>
+{% else %}
+    <p style="color:red">{{ msg.errmsg }}</p>
+{% endif %}
 
-<form id="useradd" method="post" action="{% url 'hello:js' %}" >
+<form action="{% url 'hello:userlistFormview' %}" method="post">
     姓名:<br>
     <input type="text" name="name">
     {% if form.name %}
@@ -48,7 +47,7 @@
     <input type="radio" name="sex" value="2">保密
     <br>
     <br>
-    <input type="submit" value="提交" name="_save">
-    <input type="reset" value="重置" name="_reset">
+    <input type="submit" value="提交">
+    <input type="reset" value="重置">
     </form>
 {% endblock %}

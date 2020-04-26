@@ -1,22 +1,23 @@
-{% extends "base.html" %}
-{% block title %} 用户管理系统 {% endblock %}
+<html>
+<body>
+{% extends 'base.html'%}
+{% block title %}用户管理系统
+{% endblock %}
 
 {% block content %}
-<!--{% if msg.code == 0 %}-->
-<!--    <p style="color:green">{{ msg.result }}</p>-->
-<!--{% else %}-->
-<!--    <p style="color:red">{{ msg.errmsg }}</p>-->
-<!--{% endif %}-->
-<!--{% if form %}-->
-<!--    {{ form.errors }}-->
-<!--{% endif %}-->
+{% if msg.code == 0 %}
+    <p style="color:green">{{ msg.result }}</p>
+{% else %}
+    <p style="color:red">{{ msg.errmsg }}</p>
+{% endif %}
+
 
 <a href="{% url 'hello:userlistFormview' %}">主页</a>
-<a href="{% url 'hello:js' %}">用户添加</a>
+<a href="{% url 'hello:useraddFormview' %}">用户添加</a>
 <br>
 <br>
 <!--搜索框-->
-<form id="search_user_or_phone" action="{% url 'hello:userlistFormview' %}">
+<form method="post" action="{% url 'hello:userlistFormview' %}">
     <input type="text" name="keyword" value="{{ keyword }}" placeholder="请输入关键字:">
     <button type="submit">搜索</button>
 </form>
@@ -55,3 +56,5 @@
     </tbody>
 </table>
 {% endblock %}
+</body>
+</html>
