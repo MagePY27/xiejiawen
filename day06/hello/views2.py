@@ -115,3 +115,6 @@ class UserModJsView(DetailView):
 
 class UserLoginJsView(TemplateView):
     template_name = 'dashboard/login.html'
+
+class IndexJsView(TemplateView):
+    template_name = 'dashboard/index.html'
