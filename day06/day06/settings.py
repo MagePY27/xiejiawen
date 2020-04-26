@@ -123,4 +123,4 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-# JUMP_PAGE = 'jump.html'
+JUMP_PAGE = 'jump.html'
