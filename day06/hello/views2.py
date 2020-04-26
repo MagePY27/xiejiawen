@@ -112,3 +112,6 @@ class UserModJsView(DetailView):
                 logger.error("modefy user error %s"% traceback.format_exc())
                 res = {"code": 3, "errmsg": "用户信息更新失败"}
         return render(request, settings.JUMP_PAGE, res)
+
+class UserLoginJsView(TemplateView):
+    template_name = 'dashboard/login.html'

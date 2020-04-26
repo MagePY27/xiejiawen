@@ -9,4 +9,6 @@ urlpatterns = [
     path('useraddjsview/', views2.UserAddJsView.as_view(), name='useraddJsview'),
     re_path('userdeljsview/(?P<pk>[0-9]{1,})?', views2.UserDelJsView.as_view(), name='userdelJsview'),
     re_path('usermodjsview/(?P<pk>[0-9]{1,})?', views2.UserModJsView.as_view(), name='usermodJsview'),
+
+    path('login/', views2.UserLoginJsView.as_view(), name='login')
 ]
