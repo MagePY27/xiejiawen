@@ -14,5 +14,6 @@ urlpatterns = [
 
     path('index/', views2.IndexJsView.as_view(), name='index'),
     path('login/', views2.UserLoginJsView.as_view(), name='login'),
+    path('userlist/', views2.TestListView.as_view()),
 ]
 handler404 = views2.page_not_found

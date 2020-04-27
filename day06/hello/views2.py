@@ -8,31 +8,37 @@ from django.db.models import Q, F
 from hello.models import Project_User
 from django.conf import settings
 from hello.form import UserCreateForm, UserModefyForm
+from django.views.generic import ListView
+from pure_pagination.mixins import PaginationMixin
+
+from hello.models import Project_User
 
 logger = logging.getLogger('Project_User')
 
-class UserListJsView(ListView):
+class UserListJsView(PaginationMixin, ListView):
     """
     1.用户列表，可搜索姓名手机号
     """
     template_name = 'hello/userlist.html'
     model = Project_User
     context_object_name = "users"
-    keyword = ""
+    paginate_by = 3
 
-    def get_queryset(self):
-        """关键词搜索，姓名，手机号"""
-        queryset = super(UserListJsView, self).get_queryset()
-        self.keyword = self.request.GET.get("keyword", "").strip()
-        if self.keyword:
-            queryset = queryset.filter(Q(name__icontains=self.keyword) | Q(phone__icontains=self.keyword))
-        return queryset
+    # def get_queryset(self):
+    #     """关键词搜索，姓名，手机号"""
+    #     queryset = super(UserListJsView, self).get_queryset()
+    #     self.keyword = self.request.GET.get("keyword", "").strip()
+    #     if self.keyword:
+    #         queryset = queryset.filter(Q(name__icontains=self.keyword) | Q(phone__icontains=self.keyword))
+    #     return queryset
 
-    def get_context_data(self, **kwargs):
-        """将关键字保持在搜索框内, 将过滤后的数据传给前端"""
-        context = super(UserListJsView, self).get_context_data(**kwargs)
-        context["users"] = Project_User.objects.filter(**kwargs)
-        return context
+    # def get_context_data(self, **kwargs):
+    #     """将关键字保持在搜索框内, 将过滤后的数据传给前端"""
+    #     context = super(UserListJsView, self).get_context_data(**kwargs)
+    #     context["users"] = Project_User.objects.filter(**kwargs)
+    #     return context
+
+
 
     def post(self, request):
         """创建用户"""
@@ -123,5 +129,17 @@ class IndexJsView(TemplateView):
     template_name = 'dashboard/index.html'
 
 
+class TestListView(PaginationMixin, ListView):
+    # Important, this tells the ListView class we are paginating
+    template_name = 'hello/userlist.html'
+
+    model = Project_User
+    context_object_name = "users"
+    paginate_by = 3
+    # Replace it for your model or use the queryset attribute instead
+
+
+
 def page_not_found(request, exception, template_name='404.html'):
     return render(request, template_name)
+
