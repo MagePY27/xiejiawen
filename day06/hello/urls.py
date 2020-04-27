@@ -1,5 +1,7 @@
 from django.urls import path, re_path
 from hello import views, views2
+from django.conf import settings
+
 
 app_name = 'hello'
 urlpatterns = [
@@ -11,5 +13,6 @@ urlpatterns = [
     re_path('usermodjsview/(?P<pk>[0-9]{1,})?', views2.UserModJsView.as_view(), name='usermodJsview'),
 
     path('index/', views2.IndexJsView.as_view(), name='index'),
-    path('login/', views2.UserLoginJsView.as_view(), name='login')
+    path('login/', views2.UserLoginJsView.as_view(), name='login'),
 ]
+handler404 = views2.page_not_found

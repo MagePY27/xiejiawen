@@ -28,7 +28,7 @@ class UserModefyForm(forms.ModelForm):
         model = Project_User
         fields = "__all__"
 
-    def clean_name(self):
+    def clean_userName(self):
         pass
 
     def clean_password(self):

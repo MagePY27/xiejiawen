@@ -1,7 +1,7 @@
 import logging
 import traceback
 import datetime
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, Http404
 from django.http import JsonResponse, QueryDict
 from django.views.generic import ListView, TemplateView, DetailView
 from django.db.models import Q, F
@@ -37,6 +37,7 @@ class UserListJsView(ListView):
     def post(self, request):
         """创建用户"""
         userForm = UserCreateForm(request.POST)
+        print(userForm)
 
         if userForm.is_valid():
             try:
@@ -113,8 +114,14 @@ class UserModJsView(DetailView):
                 res = {"code": 3, "errmsg": "用户信息更新失败"}
         return render(request, settings.JUMP_PAGE, res)
 
+
 class UserLoginJsView(TemplateView):
     template_name = 'dashboard/login.html'
 
+
 class IndexJsView(TemplateView):
     template_name = 'dashboard/index.html'
+
+
+def page_not_found(request, exception, template_name='404.html'):
+    return render(request, template_name)
