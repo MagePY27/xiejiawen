@@ -102,7 +102,7 @@ class UserDetailFormView(DetailView):
                 userForm.save()
                 res = {"code": 0, "msg": "更新用户成功"}
             except:
-                res = {"code": 1, "errmsg": "用户更细你失败"}
+                res = {"code": 1, "errmsg": "用户更新失败"}
                 logger.error("update user error %s " % traceback.format_exc())
         else:
             # 获取所有的表单错误

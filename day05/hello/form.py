@@ -58,7 +58,7 @@ class UserUpdateModelForm(forms.ModelForm):
         model = User
         fields = ['name', 'password', 'phone', 'age', 'sex']
 
-        def clean_phone(self):
+    def clean_phone(self):
             phone = self.cleaned_data['phone']
             phone_regex = r'^1[3578][0-9]{9}$'
             p = re.compile(phone_regex)
@@ -68,7 +68,7 @@ class UserUpdateModelForm(forms.ModelForm):
                 # 自定义表单错误
                 raise forms.ValidationError("手机号非法", code='invalid')
 
-        def clean_confirm_password(self):
+    def clean_confirm_password(self):
             password = self.cleaned_data['password']
             confirm_password = self.cleaned_data['confirm_password']
             if password != confirm_password:

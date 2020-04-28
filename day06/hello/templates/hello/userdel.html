@@ -1,5 +1,35 @@
-{% extends "base.html" %}
+{% extends "base1.html" %}
 
 {% block content %}
-<p>this is userdel page</p>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h3 class="panel-title">用户删除</h3></div>
+                            <div class="panel-body">
+                                <div class=" form">
+                                    <form class="cmxform form-horizontal tasi-form" id="commentForm" method="post" novalidate="novalidate">
+                                        <div class="form-group ">
+                                            <label>
+                                            <span class="label label-default">
+                                                <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请输入<font style="color:red">我确认</font>，然后点击提交按钮</font></font>
+                                            </span>
+                                            </label><br><br>
+                                            <div class="col-lg-10">
+                                                <textarea class="form-control " id="ccomment" name="comment" required="" aria-required="true"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-2 col-lg-10">
+                                                <h1>"username:"{{ user.id }}</h1>
+                                                <button class="btn btn-success" type="submit">提交</button>
+                                                <button class="btn btn-default" type="reset">取消</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div> <!-- .form -->
+                            </div> <!-- panel-body -->
+                        </div> <!-- panel -->
+                    </div> <!-- col -->
+
+                </div> <!-- End row -->
 {% endblock %}
