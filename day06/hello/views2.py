@@ -15,6 +15,7 @@ from hello.models import Project_User
 
 logger = logging.getLogger('Project_User')
 
+
 class UserListJsView(PaginationMixin, ListView):
     """
     1.用户列表，可搜索姓名手机号
@@ -43,7 +44,7 @@ class UserListJsView(PaginationMixin, ListView):
     def post(self, request):
         """创建用户"""
         userForm = UserCreateForm(request.POST)
-        print(userForm)
+        print(request.POST)
 
         if userForm.is_valid():
             try:
@@ -55,7 +56,7 @@ class UserListJsView(PaginationMixin, ListView):
         else:
             # 获取表单数据
             print(userForm.errors)
-            print(userForm.errors.as_json())
+            # print(userForm.errors.as_json())
             res = {"code": 2, "errmsg": "表单不合法"}
         return render(request, settings.JUMP_PAGE, res)
 
@@ -98,27 +99,52 @@ class UserModJsView(DetailView):
     context_object_name = "user"
 
     def post(self, request, **kwargs):
-        pk = Project_User.objects.filter(pk=kwargs['pk'])
-        user = self.model.objects.filter(pk=pk)
+        print(request.POST, kwargs)
+        pk = kwargs["pk"]
+        user = Project_User.objects.get(pk=pk)
         userForm = UserModefyForm(request.POST, instance=user)
         if not pk:
             res = {"code": 1, "errmsg": "用户不存在"}
             return render(request, settings.JUMP_PAGE, res)
         else:
             try:
+                print("userForm2:", userForm)
                 if userForm.is_valid():
-                    userForm.save()
-                    res = {"code": 0, "result": "用户信息更新成功"}
+                    if request.POST.get('agree') == "on":
+                        userForm.save()
+                        res = {"code": 0, "msg": "用户信息更新成功"}
+                    else:
+                        res = {"code": 4, "errmsg": "用户取消更新"}
                 else:
                     # 获取表单的数据，便于排错
                     print(userForm.errors)
                     print(userForm.errors.as_json())
-                    res = {"code": 2, "errmsg": "表单不合法"}
+                    res = {"code": 2, "errmsg": userForm.errors}
             except:
                 # 获取更新操作的错误信息
                 logger.error("modefy user error %s"% traceback.format_exc())
                 res = {"code": 3, "errmsg": "用户信息更新失败"}
         return render(request, settings.JUMP_PAGE, res)
+
+    # def post(self, request, **kwargs):
+    #     pk = kwargs['pk']
+    #     print("11111111111pk", kwargs)
+    #     if not pk:
+    #         res = {"code": 1, "errmsg": "用户不存在"}
+    #     else:
+    #         try:
+    #             data = request.POST.dict()
+    #             print("data:", data)
+    #             if data["agree"] == "on":
+    #                 data = data.pop('agree').pop('confirm_password')
+    #                 User.objects.filter(pk=pk).update(**data)
+    #                 res = {"code": 0, "errmsg": "用户信息更新成功"}
+    #             else:
+    #                 res = {"code": 2 , "errmsg": "用户取消更新操作"}
+    #         except:
+    #             logger.error("更新过程出现异常%s" % traceback.format_exc())
+    #             res = {"code": 3, "errmsg": "更新异常"}
+    #     return render(request, settings.JUMP_PAGE, res)
 
 
 class UserLoginJsView(TemplateView):
@@ -129,17 +155,17 @@ class IndexJsView(TemplateView):
     template_name = 'dashboard/index.html'
 
 
-class TestListView(PaginationMixin, ListView):
-    # Important, this tells the ListView class we are paginating
-    template_name = 'hello/userlist.html'
+# class TestListView(PaginationMixin, ListView):
+#     # Important, this tells the ListView class we are paginating
+#     template_name = 'hello/userlist.html'
+#
+#     model = Project_User
+#     context_object_name = "users"
+#     paginate_by = 3
+#     # Replace it for your model or use the queryset attribute instead
 
-    model = Project_User
-    context_object_name = "users"
-    paginate_by = 3
-    # Replace it for your model or use the queryset attribute instead
 
 
-
-def page_not_found(request, exception, template_name='404.html'):
-    return render(request, template_name)
+# def page_not_found(request, exception, template_name='404.html'):
+#     return render(request, template_name)
 
