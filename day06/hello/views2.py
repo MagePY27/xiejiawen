@@ -171,6 +171,7 @@ class UserLoginJsView(View):
     def post(self, request):
         print("POST:", request.POST)
         login_form = UserLoginForm(request.POST)
+        print(login_form)
         ret = dict(login_form=login_form)
         if login_form.is_valid():
             name_input = request.POST["name"]
@@ -245,7 +246,6 @@ class UserInfoJsview(DetailView):
 #     context_object_name = "users"
 #     paginate_by = 3
 #     # Replace it for your model or use the queryset attribute instead
-
 
 
 def page_not_found(request, exception, template_name='404.html'):
