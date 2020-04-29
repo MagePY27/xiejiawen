@@ -3,15 +3,16 @@ import traceback
 import datetime
 from django.shortcuts import render, reverse, Http404
 from django.http import JsonResponse, QueryDict
-from django.views.generic import ListView, TemplateView, DetailView
+from django.views.generic import View, ListView, TemplateView, DetailView
 from django.db.models import Q, F
 from hello.models import Project_User
 from django.conf import settings
-from hello.form import UserCreateForm, UserModefyForm
+from hello.form import UserLoginForm, UserCreateForm, UserModefyForm
 from django.views.generic import ListView
 from pure_pagination.mixins import PaginationMixin
 
 from hello.models import Project_User
+from django.contrib.auth import authenticate, login, logout
 
 logger = logging.getLogger('Project_User')
 
@@ -120,11 +121,12 @@ class UserModJsView(DetailView):
             try:
                 print("userForm2:", userForm)
                 if userForm.is_valid():
+                    # 修改完后必须得勾选确认按钮，此功能应该在前端校验
                     if request.POST.get('agree') == "on":
                         userForm.save()
                         res = {"code": 0, "msg": "用户信息更新成功"}
                     else:
-                        res = {"code": 4, "errmsg": "用户取消更新"}
+                        res = {"code": 4, "errmsg": "信息填写不完整"}
                 else:
                     # 获取表单的数据，便于排错
                     print(userForm.errors)
@@ -138,7 +140,6 @@ class UserModJsView(DetailView):
 
     # def post(self, request, **kwargs):
     #     pk = kwargs['pk']
-    #     print("11111111111pk", kwargs)
     #     if not pk:
     #         res = {"code": 1, "errmsg": "用户不存在"}
     #     else:
@@ -157,13 +158,84 @@ class UserModJsView(DetailView):
     #     return render(request, settings.JUMP_PAGE, res)
 
 
-class UserLoginJsView(TemplateView):
-    template_name = 'dashboard/login.html'
+class UserLoginJsView(View):
+    """
+    登录验证：
+    from django.contrib.auth.mixins import LoginRequiredMixin
+    from django.contrib.auth import authenticate, login, logout
+    """
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return render(request, 'dashboard/login.html')
+
+    def post(self, request):
+        print("POST:", request.POST)
+        login_form = UserLoginForm(request.POST)
+        ret = dict(login_form=login_form)
+        if login_form.is_valid():
+            name_input = request.POST["name"]
+            password_input = request.POST["password"]
+            data = Project_User.objects.filter(name=name_input, password=password_input)
+            if data:
+                ret["msg"] = "登录成功"
+                data_list = list(data.values())
+                pk = data_list[0]["id"]
+                user = Project_User.objects.filter(pk=pk)
+                return render(request, 'dashboard/index.html', {"user": user})
+            else:
+                ret["errmsg"] = "用户名或密码错误"
+        else:
+            ret["errmsg"] = "用户名和密码不能为空"
+        return render(request, 'dashboard/login.html', ret)
 
 
-class IndexJsView(TemplateView):
+    """
+    使用Django自带的auth模块来校验登录
+    """
+    # def post(self, request, **kwargs):
+    #     print("POST:", request.POST)
+    #     # 此处先获取用户登录表单
+    #     login_form = UserLoginForm(request.POST)
+    #     # 将表单内容字典化，以便得会加入其它字段
+    #     ret = dict(login_form=login_form)
+    #     if login_form.is_valid():
+    #         # 获取用户输入的用户名和密码
+    #         name_input = request.POST["name"]
+    #         password_input = request.POST["password"]
+    #         user = authenticate(name=name_input, password=password_input)
+    #         if user is not None:
+    #             login(request, user)
+    #             return render(request, 'dashboard/index.html')
+    #         else:
+    #             ret["errmsg"] = "用户名或密码错误"
+    #     else:
+    #         ret["errmsg"] = "用户名或密码不能为空"
+    #     return render(request, 'dashboard/login.html', ret)
+
+
+class IndexJsView(DetailView):
     template_name = 'dashboard/index.html'
+    model = Project_User
+    context_object_name = "user"
+    # context_object_name = "user"
+    #
+    # def post(self, request, **kwargs):
+    #     print("POST:", request.POST)
+    #     pk = kwargs["pk"]
+    #     user = Project_User.objects.filter(pk=pk)
+    #     return render(request, 'dashboard/index.html')
 
+
+class UserInfoJsview(DetailView):
+    template_name = 'hello/userinfo.html'
+    model = Project_User
+    context_object_name = "user"
+
+    def get(self,request, **kwargs):
+        print("POST:", request.POST)
+        pk = kwargs["pk"]
+        user = Project_User.objects.filter(pk=pk)
+        return render(request, 'hello/userinfo.html', {"user": user})
 
 # class TestListView(PaginationMixin, ListView):
 #     # Important, this tells the ListView class we are paginating
@@ -176,6 +248,6 @@ class IndexJsView(TemplateView):
 
 
 
-# def page_not_found(request, exception, template_name='404.html'):
-#     return render(request, template_name)
+def page_not_found(request, exception, template_name='404.html'):
+    return render(request, template_name)
 

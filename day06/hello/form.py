@@ -3,6 +3,23 @@ from django import forms
 from hello.models import Project_User
 
 
+class UserLoginForm(forms.ModelForm):
+    name = forms.CharField(required=True, error_messages={"required": "请填写用户名"})
+    password = forms.CharField(required=True, error_messages={"required": "请填写密码"})
+
+    class Meta:
+        model = Project_User
+        fields = ["name", "password"]
+
+    def clean_name(self):
+        name = self.cleaned_data["name"]
+        return name
+
+    def clean_password(self):
+        password = self.cleaned_data["password"]
+        return password
+
+
 class UserCreateForm(forms.ModelForm):
     """
     要先建函数获取表单中的各个字段，不然会报字段不存在
@@ -88,6 +105,7 @@ class UserCreateForm(forms.ModelForm):
 
 class UserModefyForm(forms.ModelForm):
     confirm_password = forms.CharField(required=True)
+
     class Meta:
         model = Project_User
         fields = "__all__"
@@ -164,4 +182,3 @@ class UserModefyForm(forms.ModelForm):
         else:
             sex = self.cleaned_data["sex"]
             return sex
-

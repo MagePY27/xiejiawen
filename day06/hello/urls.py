@@ -11,8 +11,8 @@ urlpatterns = [
     path('useraddjsview/', views2.UserAddJsView.as_view(), name='useraddJsview'),
     re_path('userdeljsview/(?P<pk>[0-9]{1,})?', views2.UserDelJsView.as_view(), name='userdelJsview'),
     re_path('usermodjsview/(?P<pk>[0-9]{1,})?', views2.UserModJsView.as_view(), name='usermodJsview'),
-
-    path('index/', views2.IndexJsView.as_view(), name='index'),
+    re_path('userinfojsview/(?P<pk>[0-9]{1,})?', views2.UserInfoJsview.as_view(), name='userinfoJsview'),
+    re_path('index/(?P<pk>[0-9]{1,})?', views2.IndexJsView.as_view(), name='index'),
     path('login/', views2.UserLoginJsView.as_view(), name='login'),
 ]
-# handler404 = views2.page_not_found
+handler404 = views2.page_not_found
