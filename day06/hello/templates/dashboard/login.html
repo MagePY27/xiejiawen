@@ -46,9 +46,9 @@
 
                 <form class="form-horizontal m-t-40" action="" method="post">
                     <div class="form-group ">
-                        <div class="col-xs-12 {% if login_form.errors.name %}has-error{% endif %}">
-                            <input class="form-control" type="text" id="name" name="name" placeholder="用户名"
-                                   value="{{ login_form.name_input.value }}">
+                        <div class="col-xs-12 {% if login_form.errors.username %}has-error{% endif %}">
+                            <input class="form-control" type="text" id="username" name="username" placeholder="账号"
+                                   value="{{ login_form.username_input.value }}">
                             <span class="glyphicon glyphicon-user form-control-feedback"></span>
                         </div>
                     </div>

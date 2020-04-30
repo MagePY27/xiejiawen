@@ -10,21 +10,9 @@
                                 <div class=" form">
                                     <form class="cmxform form-horizontal tasi-form" name="modefyForm" id="modefyForm" method="post" action="{% url 'hello:userlistJsview' %}" novalidate="novalidate">
                                         <div class="form-group ">
-                                            <label for="name" class="control-label col-lg-2">姓名 *</label>
+                                            <label for="username" class="control-label col-lg-2">账号 *</label>
                                             <div class="col-lg-10">
-                                                <input class=" form-control" id="name" name="name" type="text" value="">
-                                            </div>
-                                        </div>
-                                        <div class="form-group ">
-                                            <label for="phone" class="control-label col-lg-2">手机  *</label>
-                                            <div class="col-lg-10">
-                                                <input class=" form-control" id="phone" name="phone" type="text" value="">
-                                            </div>
-                                        </div>
-                                        <div class="form-group ">
-                                            <label for="age" class="control-label col-lg-2">年龄  *</label>
-                                            <div class="col-lg-10">
-                                                <input class=" form-control" id="age" name="age" type="text" value="">
+                                                <input class=" form-control" id="username" name="username" type="text" value="">
                                             </div>
                                         </div>
                                         <div class="form-group ">
@@ -37,6 +25,32 @@
                                             <label for="confirm_password" class="control-label col-lg-2">确认密码 *</label>
                                             <div class="col-lg-10">
                                                 <input class="form-control " id="confirm_password" name="confirm_password" type="password", value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label for="age" class="control-label col-lg-2">年龄  *</label>
+                                            <div class="col-lg-10">
+                                                <input class=" form-control" id="age" name="age" type="text" value=18>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label for="phone" class="control-label col-lg-2">手机  *</label>
+                                            <div class="col-lg-10">
+                                                <input class=" form-control" id="phone" name="phone" type="text" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label for="user_type" class="control-label col-lg-2">用户类型  *</label>
+                                            <div class="col-lg-10">
+                                                <input class=" form-control" id="user_type" name="user_type" type="text"
+                                                       value=1 readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label for="date_joined" class="control-label col-lg-2">注册日期  *</label>
+                                            <div class="col-lg-10">
+                                                <input class=" form-control" id="date_joined" name="date_joined" type="text"
+                                                       value="2020-04-30" readonly="readonly">
                                             </div>
                                         </div>
                                         <div class="form-group ">
@@ -59,6 +73,7 @@
                                                 <button class="btn btn-default" type="reset">重置</button>
                                             </div>
                                         </div>
+                                        {% csrf_token %}
                                     </form>
                                 </div> <!-- .form -->
 

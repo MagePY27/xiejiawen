@@ -5,16 +5,15 @@ from django.shortcuts import render, reverse, Http404
 from django.http import JsonResponse, QueryDict
 from django.views.generic import View, ListView, TemplateView, DetailView
 from django.db.models import Q, F
-from hello.models import Project_User
 from django.conf import settings
 from hello.form import UserLoginForm, UserCreateForm, UserModefyForm
 from django.views.generic import ListView
 from pure_pagination.mixins import PaginationMixin
 
-from hello.models import Project_User
+from hello.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 
-logger = logging.getLogger('Project_User')
+logger = logging.getLogger('UserProfile')
 
 
 class UserListJsView(PaginationMixin, ListView):
@@ -22,7 +21,7 @@ class UserListJsView(PaginationMixin, ListView):
     1.用户列表，可搜索姓名手机号
     """
     template_name = 'hello/userlist.html'
-    model = Project_User
+    model = UserProfile
     context_object_name = "users"
     paginate_by = 10
 
@@ -37,7 +36,7 @@ class UserListJsView(PaginationMixin, ListView):
     # def get_context_data(self, **kwargs):
     #     """将关键字保持在搜索框内, 将过滤后的数据传给前端"""
     #     context = super(UserListJsView, self).get_context_data(**kwargs)
-    #     context["users"] = Project_User.objects.filter(**kwargs)
+    #     context["users"] = UserProfile.objects.filter(**kwargs)
     #     return context
 
 
@@ -90,7 +89,7 @@ class UserDelJsView(TemplateView):
         else:
             if request.POST.get('comment') == "我确认":
                 try:
-                    Project_User.objects.filter(pk=pk).delete()
+                    UserProfile.objects.filter(pk=pk).delete()
                     res = {"code": 0, "msg": "用户删除成功"}
                 except:
                     logger.error("delete user error %s" % traceback.format_exc())
@@ -105,14 +104,14 @@ class UserModJsView(DetailView):
     更新用户信息
     1.基于原信息修改，密码必须修改
     """
-    model = Project_User
+    model = UserProfile
     template_name = 'hello/usermod.html'
     context_object_name = "user"
 
     def post(self, request, **kwargs):
         print(request.POST, kwargs)
         pk = kwargs["pk"]
-        user = Project_User.objects.get(pk=pk)
+        user = UserProfile.objects.get(pk=pk)
         userForm = UserModefyForm(request.POST, instance=user)
         if not pk:
             res = {"code": 1, "errmsg": "用户不存在"}
@@ -171,22 +170,25 @@ class UserLoginJsView(View):
     def post(self, request):
         print("POST:", request.POST)
         login_form = UserLoginForm(request.POST)
-        print(login_form)
+        print("form:", login_form)
         ret = dict(login_form=login_form)
+        print("ret:", ret)
         if login_form.is_valid():
-            name_input = request.POST["name"]
+            username_input = request.POST["username"]
             password_input = request.POST["password"]
-            data = Project_User.objects.filter(name=name_input, password=password_input)
+            data = UserProfile.objects.filter(username=username_input, password=password_input)
             if data:
                 ret["msg"] = "登录成功"
                 data_list = list(data.values())
                 pk = data_list[0]["id"]
-                user = Project_User.objects.filter(pk=pk)
+                user = UserProfile.objects.filter(pk=pk)
+                print("user:", user)
                 return render(request, 'dashboard/index.html', {"user": user})
             else:
-                ret["errmsg"] = "用户名或密码错误"
+                ret["errmsg"] = "账号或密码错误"
         else:
-            ret["errmsg"] = "用户名和密码不能为空"
+            print(login_form.errors)
+            ret["errmsg"] = "账号和密码不能为空"
         return render(request, 'dashboard/login.html', ret)
 
 
@@ -216,33 +218,32 @@ class UserLoginJsView(View):
 
 class IndexJsView(DetailView):
     template_name = 'dashboard/index.html'
-    model = Project_User
+    model = UserProfile
     context_object_name = "user"
-    # context_object_name = "user"
     #
     # def post(self, request, **kwargs):
     #     print("POST:", request.POST)
     #     pk = kwargs["pk"]
-    #     user = Project_User.objects.filter(pk=pk)
+    #     user = UserProfile.objects.filter(pk=pk)
     #     return render(request, 'dashboard/index.html')
 
 
 class UserInfoJsview(DetailView):
     template_name = 'hello/userinfo.html'
-    model = Project_User
+    model = UserProfile
     context_object_name = "user"
 
     def get(self,request, **kwargs):
         print("POST:", request.POST)
         pk = kwargs["pk"]
-        user = Project_User.objects.filter(pk=pk)
+        user = UserProfile.objects.filter(pk=pk)
         return render(request, 'hello/userinfo.html', {"user": user})
 
 # class TestListView(PaginationMixin, ListView):
 #     # Important, this tells the ListView class we are paginating
 #     template_name = 'hello/userlist.html'
 #
-#     model = Project_User
+#     model = UserProfile
 #     context_object_name = "users"
 #     paginate_by = 3
 #     # Replace it for your model or use the queryset attribute instead

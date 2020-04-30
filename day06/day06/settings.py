@@ -52,7 +52,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'day06.urls'
-AUTH_USER_MODEL = 'hello.Project_User'
+AUTH_USER_MODEL = 'hello.UserProfile'
 
 TEMPLATES = [
     {

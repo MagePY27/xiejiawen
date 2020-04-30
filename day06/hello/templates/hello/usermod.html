@@ -11,9 +11,9 @@
                                     <form class="cmxform form-horizontal tasi-form" id="modefyForm" method="post"
                                           action="{% url 'hello:usermodJsview' user.id %}" novalidate="novalidate">
                                         <div class="form-group ">
-                                            <label for="name" class="control-label col-lg-2">姓名 *</label>
+                                            <label for="username" class="control-label col-lg-2">账号 *</label>
                                             <div class="col-lg-10">
-                                                <input class=" form-control" id="name" name="name" type="text" value="{{ user.name }}">
+                                                <input class=" form-control" id="username" name="username" type="text" value="{{ user.username }}">
                                             </div>
                                         </div>
                                         <div class="form-group ">
@@ -38,6 +38,20 @@
                                             <label for="confirm_password" class="control-label col-lg-2">确认密码 *</label>
                                             <div class="col-lg-10">
                                                 <input class="form-control " id="confirm_password" name="confirm_password" type="password", value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label for="user_type" class="control-label col-lg-2">用户类型 *</label>
+                                            <div class="col-lg-10">
+                                                <input class=" form-control" id="user_type" name="user_type" type="text"
+                                                       value="{{ user.user_type }}" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label for="user_type" class="control-label col-lg-2">注册日期 *</label>
+                                            <div class="col-lg-10">
+                                                <input class=" form-control" id="date_joined" name="date_joined" type="text"
+                                                       value="{{ user.date_joined }}" >
                                             </div>
                                         </div>
                                         <div class="form-group ">

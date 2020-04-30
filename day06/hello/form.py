@@ -1,21 +1,27 @@
 import re
 from django import forms
-from hello.models import Project_User
+from hello.models import UserProfile
+from datetime import datetime
 
 
-class UserLoginForm(forms.ModelForm):
-    name = forms.CharField(required=True, error_messages={"required": "请填写用户名"})
+class UserLoginForm(forms.Form):
+    username = forms.CharField(required=True, error_messages={"required": "请填写用户名"})
     password = forms.CharField(required=True, error_messages={"required": "请填写密码"})
 
-    class Meta:
-        model = Project_User
-        fields = ["name", "password"]
-
-    def clean_name(self):
-        name = self.cleaned_data["name"]
-        return name
+    def clean_username(self):
+        if "username" not in self.cleaned_data.keys():
+            raise forms.ValidationError("用户名为必填项", code="ValueErr")
+        else:
+            username = self.cleaned_data['username']
+            if len(username.strip()) > 16:
+                raise forms.ValidationError("你的名字太长了")
+            elif len(username.strip()) < 2:
+                raise forms.ValidationError("名字至少要包含两个字或字符")
+            else:
+                return username
 
     def clean_password(self):
+        # print("pwd:", self.cleaned_data)
         password = self.cleaned_data["password"]
         return password
 
@@ -27,22 +33,22 @@ class UserCreateForm(forms.ModelForm):
     confirm_password = forms.CharField(required=True)
 
     class Meta:
-        model = Project_User
+        model = UserProfile
         fields = "__all__"
 
-    def clean_name(self):
+    def clean_username(self):
         # 应该再加一个特殊字符的判断
-        if "name" not in self.cleaned_data.keys():
+        if "username" not in self.cleaned_data.keys():
             raise forms.ValidationError("用户名为必填项", code="ValueErr")
         else:
-            name = self.cleaned_data['name']
+            username = self.cleaned_data['username']
             # 除去名字两端的空字符，按道理说应该去掉名字上的所有特殊字符
-            if len(name.strip()) > 16:
+            if len(username.strip()) > 16:
                 raise forms.ValidationError("你的名字太长了")
-            elif len(name.strip()) < 2:
+            elif len(username.strip()) < 2:
                 raise forms.ValidationError("名字至少要包含两个字或字符")
             else:
-                return name
+                return username
 
     def clean_password(self):
         if "password" not in self.cleaned_data.keys():
@@ -97,32 +103,48 @@ class UserCreateForm(forms.ModelForm):
 
     def clean_sex(self):
         if "sex" not in self.cleaned_data.keys():
-            sex = 0
+            self.cleaned_data["sex"] = 0
         else:
             sex = self.cleaned_data["sex"]
-            return sex
+        return sex
+
+    def clean_user_type(self):
+        if "user_type" not in self.cleaned_data.keys():
+            # 默认用户为普通用户
+            self.cleaned_data["user_type"] = 1
+        else:
+            user_type = self.cleaned_data["user_type"]
+        return user_type
+
+    def clean_date_joined(self):
+        if "date_joined" not in self.cleaned_data.keys():
+            self.cleaned_data["date_joined"] = date
+        else:
+            date_joined = self.cleaned_data["date_joined"]
+        return date_joined
+
 
 
 class UserModefyForm(forms.ModelForm):
     confirm_password = forms.CharField(required=True)
 
     class Meta:
-        model = Project_User
+        model = UserProfile
         fields = "__all__"
 
-    def clean_name(self):
+    def clean_username(self):
         # 应该再加一个特殊字符的判断
-        if "name" not in self.cleaned_data.keys():
+        if "username" not in self.cleaned_data.keys():
             raise forms.ValidationError("用户名为必填项", code="ValueErr")
         else:
-            name = self.cleaned_data['name']
+            username = self.cleaned_data['username']
             # 除去名字两端的空字符，按道理说应该去掉名字上的所有特殊字符
-            if len(name.strip()) > 16:
+            if len(username.strip()) > 16:
                 raise forms.ValidationError("你的名字太长了")
-            elif len(name.strip()) < 2:
+            elif len(username.strip()) < 2:
                 raise forms.ValidationError("名字至少要包含两个字或字符")
             else:
-                return name
+                return username
 
     def clean_password(self):
         if "password" not in self.cleaned_data.keys():
@@ -132,7 +154,6 @@ class UserModefyForm(forms.ModelForm):
             if len(password.strip()) < 8 or len(password.strip()) > 16:
                 raise forms.ValidationError("你的密码太长或太短")
             else:
-                print("password::::", password)
                 return password
 
     def clean_confirm_password(self):
@@ -178,7 +199,23 @@ class UserModefyForm(forms.ModelForm):
 
     def clean_sex(self):
         if "sex" not in self.cleaned_data.keys():
-            sex = 0
+            self.cleaned_data["sex"] = 0
         else:
             sex = self.cleaned_data["sex"]
-            return sex
+        return sex
+
+    def clean_user_type(self):
+        if "user_type" not in self.cleaned_data.keys():
+            # 默认用户为普通用户
+            self.cleaned_data["user_type"] = 1
+        else:
+            user_type = self.cleaned_data["user_type"]
+        return user_type
+
+    def clean_date_joined(self):
+        date = datetime.now()
+        if "date_joined" not in self.cleaned_data.keys():
+            self.cleaned_data["date_joined"] = date
+        else:
+            date_joined = self.cleaned_data["date_joined"]
+        return date_joined

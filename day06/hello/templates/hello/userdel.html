@@ -24,10 +24,11 @@
                                                     <font style="vertical-align: inherit;">提交</font></font>
                                                 </button>
                                                 <button type="reset" class="btn btn-info btn-rounded m-b-5"><font style="vertical-align: inherit;">
-                                                    <font style="vertical-align: inherit;">取消</font></font>
+                                                    <font style="vertical-align: inherit;">重置</font></font>
                                                 </button>
                                             </div>
                                         </div>
+                                        {% csrf_token %}
                                     </form>
                                 </div> <!-- .form -->
                             </div> <!-- panel-body -->
