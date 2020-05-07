@@ -83,7 +83,10 @@ class UserCreateForm(forms.ModelForm):
             raise forms.ValidationError("手机为必填项")
         else:
             phone = self.cleaned_data["phone"]
-            phone_regex = re.compile(r"^1[3|5|7|8][0-9]{9}$")
+            if not phone:
+                raise forms.ValidationError("手机为必填项")
+            else:
+                phone_regex = re.compile(r"^1[3|5|7|8][0-9]{9}$")
             if phone_regex.match(phone):
                 return phone
             else:

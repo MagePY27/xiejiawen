@@ -1,8 +1,10 @@
 {% extends "base1.html" %}
+{% block js1 %}
+
+{% endblock %}
 
 {% block content %}
  <div class="row">
-
                     <div class="col-sm-12">
                         <div class="panel panel-default">
                             <div class="panel-heading"><h3 class="panel-title">创建用户</h3></div>
@@ -76,11 +78,8 @@
                                         {% csrf_token %}
                                     </form>
                                 </div> <!-- .form -->
-
                             </div> <!-- panel-body -->
                         </div> <!-- panel -->
                     </div> <!-- col -->
-
                 </div> <!-- End row -->
-
 {% endblock %}
