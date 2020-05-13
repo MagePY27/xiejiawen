@@ -1,0 +1,83 @@
+{% extends 'base1.html' %}
+{% block title %}
+    编辑角色
+{% endblock %}
+{% block js1 %}
+    <style>
+        .checkbox-inline + .checkbox-inline {
+            margin-left: 0;
+        }
+
+        .checkbox-inline {
+            margin-right: 10px
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">编辑角色信息</h3>
+                </div>
+                <div class="panel-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                      <form class="form-horizontal" role="form" action="" method="post">
+                      {% csrf_token %}
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">角色名称：</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" id="inputEmail3" name="name" value="{{ object.name }}" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">权限：</label>
+                                <div class="col-sm-9">
+                                    {% regroup permissions by content_type__app_label as perm_list %}
+                                    {% for permission in perm_list %}
+                                        <div style="margin-bottom: 10px; overflow: hidden">
+                                            <h4>{% if permission.grouper == 'auth' %}认证与授权
+                                            {% elif permission.grouper == 'assets' %}CMDB
+                                            {% elif permission.grouper == 'taggit' %}标签管理
+                                            {% elif permission.grouper == 'task' %}任务系统{% else %}
+                                                {{ permission.grouper }}{% endif %} </h4>
+                                            <div class="col-sm-12" style="padding-left: 0">
+                                                {% for perm in permission.list %}
+                                                    <label class="checkbox-inline">
+                                                        <input type="checkbox" name="permissions" value="{{ perm.id }}"
+                                                               {% for permission in object.permissions.all %}{% ifequal permission.id perm.id %}checked
+                                                               {% endifequal %}{% endfor %}> {{ perm.name }}
+                                                    </label>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group m-b-0">
+                                <div class="col-sm-offset-3 col-sm-9">
+                                  <button type="submit" name="_save" class="btn btn-primary">保存</button>
+                                  <button type="submit" name="_savedit" class="btn btn-primary">保存并继续编辑</button>
+                                  <button type="submit" name="_addanother"  class="btn btn-primary">保存并添加另一个</button>
+                                </div>
+                            </div>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js2 %}
+    <script>
+        $('.user').addClass('active');
+        $('.user .groups').addClass('active');
+    </script>
+{% endblock %}
+

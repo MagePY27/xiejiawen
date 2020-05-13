@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    首页
+{% endblock %}
+
+{% block page-title %}
+    仪表盘
+{% endblock %}
+{% block page-content %}
+    <div class="row">
+        <div class="col-lg-3 col-sm-6">
+            <div class="widget-panel widget-style-2 white-bg">
+                <i class="ion-android-social-user text-pink"></i>
+                <h2 class="m-0 counter">50</h2>
+                <div>用户数</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="widget-panel widget-style-2 white-bg">
+                <i class="fa fa-desktop text-purple"></i>
+                <h2 class="m-0 counter">8956</h2>
+                <div>资产数</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="widget-panel widget-style-2 white-bg">
+                <i class="fa fa-tasks text-info"></i>
+                <h2 class="m-0 counter">268</h2>
+                <div>任务数</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="widget-panel widget-style-2 white-bg">
+                <i class="fa fa-tags text-success"></i>
+                <h2 class="m-0 counter">30</h2>
+                <div>标签数</div>
+            </div>
+        </div>
+    </div> <!-- end row -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="portlet"><!-- /primary heading -->
+                <div class="portlet-heading">
+                    <h3 class="portlet-title text-dark text-uppercase">
+                        每天活跃用户数
+                    </h3>
+                    <div class="portlet-widgets">
+                        <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                        <span class="divider"></span>
+                        <a data-toggle="collapse" data-parent="#accordion1" href="#portlet2"><i
+                                class="ion-minus-round"></i></a>
+                        <span class="divider"></span>
+                        <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="portlet2" class="panel-collapse collapse in">
+                    <div class="portlet-body">
+                        <div id="user-nums" style="height:400px;"></div>
+                    </div>
+                </div>
+            </div> <!-- /Portlet -->
+
+        </div>
+        <div class="col-lg-6">
+            <div class="portlet"><!-- /primary heading -->
+                <div class="portlet-heading">
+                    <h3 class="portlet-title text-dark text-uppercase">
+                        配置文件发布次数
+                    </h3>
+                    <div class="portlet-widgets">
+                        <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                        <span class="divider"></span>
+                        <a data-toggle="collapse" data-parent="#accordion1" href="#portlet1"><i
+                                class="ion-minus-round"></i></a>
+                        <span class="divider"></span>
+                        <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="portlet1" class="panel-collapse collapse in">
+                    <div class="portlet-body">
+                        <div id="task-nums" style="height:400px;"></div>
+                    </div>
+                </div>
+            </div> <!-- /Portlet -->
+
+        </div> <!-- end col -->
+
+    </div> <!-- End row -->
+{% endblock %}
+

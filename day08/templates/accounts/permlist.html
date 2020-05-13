@@ -1,0 +1,89 @@
+{% extends "base1.html" %}
+{% block js1 %}
+{% endblock %}
+{% block title %}
+    权限列表
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">查看权限列表</h3>
+                </div>
+                <div class="panel-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="row" style="margin-bottom: 5px">
+                        <div class="col-md-2" style="float: right">
+                            <form class="form-horizontal" role="form">
+
+                                    <div class="input-group">
+                                        <input type="text" id="keyword" name="keyword" value="{{ keyword|default_if_none:'' }}" class="form-control" placeholder="关键字">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-effect-ripple btn-primary">搜索</button>
+                                        </span>
+                                    </div>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                             <table class="table table-bordered">
+                        <thead>
+                        <tr>
+
+                            <th>权限名称</th>
+                            <th>内容类型</th>
+                            <th>CodeName</th>
+                            {% if perms.auth.change_permission %}
+                                <th>动作</th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for permission in object_list %}
+                            <tr>
+                                <td>{{ permission.name }}</td>
+                                <td>{{ permission }}</td>
+                                <td>{{ permission.codename }}</td>
+                                {% if perms.auth.change_permission %}
+                                    <td>
+                                        <a class="btn btn-primary btn-xs" href="{% url 'accounts:permupdate' permission.id %}">重命名</a>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                           <p style="margin-top: 10px"> 显示 [{{ page_obj.paginator.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 的数据</p>
+                        </div>
+                        <div class="col-md-8">
+                             {% if page_obj.paginator.num_pages > 1 %}
+                                {% include '_pagination.html' %}
+                             {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js2 %}
+    <script>
+        $('.user').addClass('active');
+        $('.user .permissions').addClass('active');
+    </script>
+{% endblock %}

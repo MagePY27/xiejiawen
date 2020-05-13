@@ -1,0 +1,105 @@
+{% extends 'base1.html' %}
+{% load static %}
+{% block title %}
+    用户添加
+{% endblock %}
+
+{% block page-title %}
+    用户添加
+{% endblock %}
+{% block page-content %}
+    <!-- Form-validation -->
+<div class="row">
+
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            
+            <div class="panel-heading"><h3 class="panel-title">请添加一个用户</h3></div>
+            <div class="panel-body">
+
+                {% if form %}
+                        <div class="alert  alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <p style="color:red"> {{ form.errors }} </p>
+                        </div>
+                {% endif %}
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class=" form">
+                    <form class="cmxform form-horizontal tasi-form" id="signupForm" method="post" action="" novalidate="novalidate">
+                        <div class="form-group ">
+                            <label for="username" class="control-label col-lg-2">用户名 *</label>
+                            <div class="col-lg-10">
+                                <input class=" form-control" name="username" value="{% if object %} {{ object.username }} {% endif %}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="name" class="control-label col-lg-2">中文名 *</label>
+                            <div class="col-lg-10">
+                                <input class=" form-control" name="name" value="{% if object %} {{ object.name }} {% endif %}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="name" class="control-label col-lg-2">手机号 *</label>
+                            <div class="col-lg-10">
+                                <input class=" form-control" name="phone" value="{% if object %} {{ object.phone }} {% endif %}" type="text">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="level" class="control-label col-lg-2">性别 *</label>
+                            <div class="col-lg-10">
+                                <div class="radio-inline">
+                                    <label class="cr-styled" >
+                                        <input type="radio"  name="sex" value="0" {% if object %}{% if object.sex == 0 %}checked{% endif %}{% endif %} >
+                                        <i class="fa"></i>
+                                        男
+                                    </label>
+                                </div>
+
+                                <div class="radio-inline">
+                                    <label class="cr-styled">
+                                        <input type="radio"  name="sex" value="1" {% if object %}{% if object.sex == 1 %}checked{% endif %}{% endif %}>
+                                        <i class="fa"></i>
+                                        女
+                                    </label>
+                                </div>
+    
+
+                            </div>
+                        </div>
+
+                       
+
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-lg-10">
+                                 <button class="btn btn-success" type="submit">确定</button>
+                                 {% if object %}
+                                     <button type="submit" name='_savedit' class="btn btn-purple">保存并继续编辑</button>
+                                 {% endif %}
+                                 <button type="submit" name='_addanother' class="btn btn-purple" >保存并添加另一个</button>
+                                 <button class="btn btn-default" type="reset">取消</button>
+                            </div>
+                        </div>
+                    </form>
+                </div> <!-- .form -->
+
+            </div> <!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col -->
+
+</div> <!-- End row -->
+
+
+{% endblock %}
+

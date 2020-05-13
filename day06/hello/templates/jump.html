@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base1.html" %}
 
 {% block content %}
     {% if code == 0 %}
@@ -7,5 +7,5 @@
         <h1>操作失败</h1><br>
         <h3>{{ errmsg }}</h3>
     {% endif %}
-<a href="{% url 'hello:userlistFormview' %}">返回主页</a>
+<a style="color:green" href="{% url 'hello:userlistJsview' %}">返回主页</a>
 {% endblock %}
