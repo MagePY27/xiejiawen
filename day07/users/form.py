@@ -138,7 +138,7 @@ class UserModefyForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        exclude = ['password']
+        exclude = ['password', 'date_joined']
 
     def clean_username(self):
         # 应该再加一个特殊字符的判断
@@ -192,10 +192,10 @@ class UserModefyForm(forms.ModelForm):
             user_type = self.cleaned_data["user_type"]
         return user_type
 
-    def clean_date_joined(self):
-        date = datetime.now()
-        if "date_joined" not in self.cleaned_data.keys():
-            self.cleaned_data["date_joined"] = date
-        else:
-            date_joined = self.cleaned_data["date_joined"]
-        return date_joined
+    # def clean_date_joined(self):
+    #     date = datetime.now()
+    #     if "date_joined" not in self.cleaned_data.keys():
+    #         self.cleaned_data["date_joined"] = date
+    #     else:
+    #         date_joined = self.cleaned_data["date_joined"]
+    #     return date_joined

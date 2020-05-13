@@ -1,0 +1,62 @@
+{% extends 'base1.html' %}
+{% block css %}
+
+{% endblock %}
+{% block title %}
+    编辑权限
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">编辑权限信息</h3>
+                </div>
+                <div class="panel-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                      <form class="form-horizontal" role="form" action="" method="post">
+                      {% csrf_token %}
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">权限名称:</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" id="inputEmail3" name="name" value="{{ object.name }}" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="content_type" class="col-sm-3 control-label">内容类型：</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" id="content_type" name="content_type" value="{{ object.content_type }}" autocomplete="off" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="codename" class="col-sm-3 control-label">内容类型：</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control" id="codename" name="codename" value="{{ object.codename }}" autocomplete="off" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group m-b-0">
+                                <div class="col-sm-offset-3 col-sm-9">
+                                  <button type="submit" name="_save" class="btn btn-primary">保存</button>
+                                  <button type="submit" name="_savedit" class="btn btn-primary">保存并继续编辑</button>
+                                </div>
+                            </div>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        $('.user').addClass('active');
+        $('.user .permissions').addClass('active');
+    </script>
+{% endblock %}

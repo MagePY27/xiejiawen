@@ -76,6 +76,7 @@
                     <li class="has-submenu"><a href="#"><i class="ion-grid"></i> <span class="nav-label">数据表</span></a>
                         <ul class="list-unstyled">
                             <li><a href="{% url 'users:userlistJsview' %}">用户表</a></li>
+                            <li class="active"><a href="{% url 'accounts:permmod' user.id %}">权限表</a></li>
                             <li><a href="404.html">模板页面</a></li>
                             <li><a href="404.html">模板页面</a></li>
                             <li><a href="404.html">模板页面</a></li>
@@ -219,7 +220,7 @@
                                 <span class="username">{{ user.username }} </span> <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu pro-menu fadeInUp animated" tabindex="5003" style="overflow: hidden; outline: none;">
-                                <li><a href="{% url 'accounts:pwdmod' user.id %}"><i class="fa fa-briefcase"></i>个人信息</a></li>
+                                <li><a href="{% url 'accounts:pwdmod' user.id %}"><i class="fa fa-briefcase"></i>修改密码</a></li>
                                 <li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> 登出</a></li>
                             </ul>
                         </li>

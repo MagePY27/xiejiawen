@@ -1,0 +1,115 @@
+{% extends "base1.html" %}
+{% block js1 %}
+{% endblock %}
+{% block title %}
+    权限列表
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">查看用户列表</h3>
+                </div>
+                <div class="panel-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="row" style="margin-bottom: 5px">
+                        <div class="col-md-2" style="float: right">
+                            <form class="form-horizontal" role="form">
+
+                                    <div class="input-group">
+                                        <input type="text" id="keyword" name="keyword" value="{{ keyword|default_if_none:'' }}" class="form-control" placeholder="关键字">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-effect-ripple btn-primary">搜索</button>
+                                        </span>
+                                    </div>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>账号</th>
+                                <th>密码</th>
+                                <th>手机</th>
+                                <th>性别</th>
+                                <th>用户类型</th>
+                                <th>注册日期</th>
+                                <th>是否激活</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td>{{ user.username }}</td>
+                                    <td>********</td>
+                                    <td>{{ user.phone }}</td>
+                                    <td>
+                                        {% if user.sex == 0 %}男
+                                        {% elif user.sex == 1 %}女
+                                        {% else %}保密
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if user.user_type == 2 %}普通用户
+                                        {% elif user.user_type == 1 %}权限用户
+                                        {% elif user.user_type == 0 %}超级管理员
+                                        {% else %}非法用户
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ user.date_joined }}</td>
+                                    <td>
+                                        {% if user.is_active == 1 %}已经激活
+                                        {% elif user.is_active == 0 %}未激活
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if perms.users.change_userprofile %}
+                                        <a href="{% url 'users:usermodJsview' user.id %}" class="on-default edit-row"><i class="fa fa-pencil"></i></a>
+                                        {% endif %}
+<!--                                        {% if perms.auth.change_permission %}-->
+<!--                                        <a href="{% url 'accounts:permupdate' user.id %}" class="on-default remove-row"><i class="fa fa-cogs" ></i></a>-->
+<!--                                        {% endif %}-->
+                                        {% if perms.users.delete_userprofile %}
+                                        <a href="{% url 'users:userdelJsview' user.id %}" class="on-default remove-row"><i class="fa fa-trash-o"></i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                           <p style="margin-top: 10px"> 显示 [{{ page_obj.paginator.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 的数据</p>
+                        </div>
+                        <div class="col-md-8">
+                             {% if page_obj.paginator.num_pages > 1 %}
+                                {% include '_pagination.html' %}
+                             {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js2 %}
+    <script>
+        $('.user').addClass('active');
+        $('.user .permissions').addClass('active');
+    </script>
+{% endblock %}

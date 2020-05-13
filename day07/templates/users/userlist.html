@@ -62,6 +62,7 @@
                                     </td>
                                     <td>
                                         <a href="{% url 'users:usermodJsview' user.id %}" class="on-default edit-row"><i class="fa fa-pencil"></i></a>
+                                        <a href="{% url 'accounts:permmod' user.id %}" class="on-default remove-row"><i class="fa fa-cogs" ></i></a>
                                         <a href="{% url 'users:userdelJsview' user.id %}" class="on-default remove-row"><i class="fa fa-trash-o"></i></a>
                                     </td>
                                 </tr>

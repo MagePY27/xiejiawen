@@ -31,7 +31,7 @@
                                         <div class="form-group ">
                                             <label for="username" class="control-label col-lg-2">账号 *</label>
                                             <div class="col-lg-10">
-                                                <input class=" form-control" id="username" name="username" type="text" value="{{ user.username }}">
+                                                <input class=" form-control" id="username" name="username" type="text" value="{{ user.username }}" readonly="readonly">
                                             </div>
                                         </div>
                                         <div class="form-group ">
@@ -51,13 +51,6 @@
                                             <div class="col-lg-10">
                                                 <input class=" form-control" id="user_type" name="user_type" type="text"
                                                        value="{{ user.user_type }}" readonly="readonly">
-                                            </div>
-                                        </div>
-                                        <div class="form-group ">
-                                            <label for="user_type" class="control-label col-lg-2">注册日期 *</label>
-                                            <div class="col-lg-10">
-                                                <input class=" form-control" id="date_joined" name="date_joined" type="text"
-                                                       value="{{ user.date_joined }}" >
                                             </div>
                                         </div>
                                         <div class="form-group ">

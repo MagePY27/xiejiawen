@@ -8,6 +8,7 @@ from django.db.models import Q, F
 from django.conf import settings
 from users.form import UserLoginForm, UserCreateForm, UserModefyForm
 from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from pure_pagination.mixins import PaginationMixin
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -213,8 +214,6 @@ class UserInfoJsView(LoginRequiredMixin, DetailView):
         pk = kwargs["pk"]
         user = UserProfile.objects.filter(pk=pk)
         return render(request, 'users/userinfo.html', {"user": user})
-
-
 
 
 def page_not_found(request, exception, template_name='404.html'):

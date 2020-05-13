@@ -27,5 +27,9 @@ class UserProfile(AbstractUser):
         return self.name
 
     def save(self, *args, **kwargs):
+        # 也可以在form里面写个方法来先加密然后再传到这里入库，那此处的seve方法就可以省略
+        # password = form.cleaned_data['username]
+        # form.instance.password = make_password(password)
+        # form.instance = user = UserProfile.objects.get(pk=pk)
         self.password = make_password(self.password, None, 'pbkdf2_sha256')
         super(UserProfile, self).save(*args, **kwargs)
