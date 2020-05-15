@@ -56,11 +56,11 @@
                                         <div class="form-group ">
                                             <label for="sex" class="control-label col-lg-2">性别 *</label>
                                             <div class="col-lg-10">
-                                                {% if user.sex == 0 %}
+                                                {% if object.sex == 0 %}
                                                     <input type="radio" name="sex" value=0 checked>男
                                                     <input type="radio" name="sex" value=1 >女
                                                     <input type="radio" name="sex" value=2>保密<br>
-                                                    {% elif user.sex == 1 %}
+                                                    {% elif object.sex == 1 %}
                                                     <input type="radio" name="sex" value=0 >男
                                                     <input type="radio" name="sex" value=1 checked>女
                                                     <input type="radio" name="sex" value=2>保密<br>
@@ -71,18 +71,31 @@
                                                 {% endif %}
                                             </div>
                                         </div>
+                                        {% if request.user.username == 'admin' %}
                                         <div class="form-group ">
                                             <label for="is_active" class="control-label col-lg-2">激活用户 *</label>
                                             <div class="col-lg-10">
-                                                {% if user.is_active == 0 %}
+                                                {% if object.is_active == 0 %}
                                                     <input type="radio" name="is_active" value=0 checked>禁用
                                                     <input type="radio" name="is_active" value=1 >启用
-                                                    {% elif user.is_active == 1 %}
+                                                    {% elif object.is_active == 1 %}
                                                     <input type="radio" name="is_active" value=0 >禁用
                                                     <input type="radio" name="is_active" value=1 checked>启用
                                                 {% endif %}
                                             </div>
                                         </div>
+                                        {% else %}
+                                        <div class="form-group ">
+                                            <label for="is_active" class="control-label col-lg-2">用户状态 *</label>
+                                            <div class="col-lg-10">
+                                                {% if object.is_active == 0 %}
+                                                    <input type="radio" name="is_active" value=0 checked >禁用
+                                                    {% elif object.is_active == 1 %}
+                                                    <input type="radio" name="is_active" value=1 checked >启用
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        {% endif %}
                                         <div class="form-group ">
                                         <label for="agree" class="control-label col-lg-2 col-sm-3">我已确认所填信息 *</label>
                                         <div class="col-lg-10 col-sm-9">

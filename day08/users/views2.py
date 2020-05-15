@@ -55,7 +55,6 @@ class UserListJsView(LoginRequiredMixin, PermissionRequiredMixin, PaginationMixi
     context_object_name = "users"
     paginate_by = 5
     permission_required = 'users.view_userprofile'
-
     # 用户没有通过时跳转的地址，默认是 settings.LOGIN_URL.
     # login_url = '/login/'
     # redirect_field_name = 'redirect_to'
@@ -64,6 +63,7 @@ class UserListJsView(LoginRequiredMixin, PermissionRequiredMixin, PaginationMixi
 
     # 数据过滤
     def get_queryset(self):
+        # print("请求者:", self.request.user.username)
         queryset = super(UserListJsView, self).get_queryset()
         queryset = queryset.exclude(username='admin')
         self.keyword = self.request.GET.get("keyword", "")
@@ -84,7 +84,6 @@ class UserListJsView(LoginRequiredMixin, PermissionRequiredMixin, PaginationMixi
         """
         创建用户: 此功能使用表单来操作数据
         """
-        print("POST:", request.POST)
         try:
             userForm = UserCreateForm(request.POST)
             print(type(userForm))
@@ -95,6 +94,8 @@ class UserListJsView(LoginRequiredMixin, PermissionRequiredMixin, PaginationMixi
         if userForm.is_valid():
             try:
                 if request.POST.get('agree') == "on":
+                    old_password = userForm.cleaned_data['password']
+                    userForm.cleaned_data['password'] = make_password(old_password, None, 'pbkdf2_sha256')
                     userForm.save()
                     res = {"code": 0, "msg": "用户创建成功"}
                     # 用户没有勾选同意按钮
@@ -180,11 +181,20 @@ class UserModJsView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
                 if userForm.is_valid():
                     # 修改完后必须得勾选确认按钮，此功能应该在前端校验
                     if request.POST.get('agree') == "on":
-                        userForm.save(commit=True)
-                        # data.pop('agree')
-                        # data.pop('csrfmiddlewaretoken')
-                        # self.model.objects.filter(pk=pk).update(**data)
-                        res = {"code": 0, "msg": "用户信息更新成功"}
+                        if self.request.user.username == "admin":
+                            userForm.save(commit=True)
+                            res = {"code": 0, "msg": "用户状态改变并更新成功"}
+                        elif 'is_active' in data.keys():
+                        # 非管理员时，其传is_active字段时，报错（防止前端伪造）
+                        # 此功能为完善，因为is_active为必填项，所以也会被传过来
+                        #　
+                            print("data:::::", data)
+                            userForm.cleaned_data.pop('is_active')
+                            userForm.save()
+                            res = {"code": 0, "msg": "用户信息修改成功"}
+                        else:
+                            userForm.save(commit=True)
+                            res = {"code": 0, "msg": "用户信息更新成功"}
                     else:
                         res = {"code": 4, "errmsg": "信息填写不完整"}
                 else:
@@ -366,6 +376,19 @@ class GroupDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('users:group_list')
+
+
+class UserActiveView(LoginRequiredMixin, TemplateView):
+    """
+    激活用户：
+    1.只有管理员才可以进行操作
+    2.防止注入待完善
+    """
+    template_name = 'users/useractive.html'
+    # context_object_name = 'user'
+    # model = UserProfile
+    # permission_required = 'perms.users.view_userprofile'
+    # permission_required = 'perms.auth.change_permission, perms.auth.change_contenttype, perms.auth.add_contenttype, perms.auth.view_contenttype '
 
 
 # class IndexJsView(DetailView):

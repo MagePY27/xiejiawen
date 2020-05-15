@@ -20,5 +20,7 @@ urlpatterns = [
     re_path('group_add_user/(?P<pk>[0-9]{1,})?', views2.GroupAddUserView.as_view(), name='group_add_user'),
     re_path('group_update/(?P<pk>[0-9]{1,})?', views2.GroupUpdateView.as_view(), name='group_update'),
     re_path('group_delete/(?P<pk>[0-9]{1,})?', views2.GroupDeleteView.as_view(), name='group_delete'),
+
+    path('111', views2.UserActiveView.as_view(), name='user_active'),
 ]
 # handler404 = views2.page_not_found

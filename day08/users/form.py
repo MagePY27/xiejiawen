@@ -2,6 +2,8 @@ import re
 from django import forms
 from users.models import UserProfile
 from datetime import datetime
+
+
 # 注意区别Form和ModelForm的区别，ModelForm会有自动创建用户的操作，因此
 # 修改和登录用户所输入的表单应该用Form而不是ModelForm
 
@@ -137,7 +139,7 @@ class UserCreateForm(forms.ModelForm):
 
 
 class UserModefyForm(forms.ModelForm):
-    is_active = forms.IntegerField(required=True)
+    is_active = forms.IntegerField(required=True, )
 
     class Meta:
         model = UserProfile
@@ -174,8 +176,6 @@ class UserModefyForm(forms.ModelForm):
             sex = self.cleaned_data["sex"]
         return sex
 
-
-
     # def clean_date_joined(self):
     #     date = datetime.now()
     #     if "date_joined" not in self.cleaned_data.keys():
@@ -183,3 +183,7 @@ class UserModefyForm(forms.ModelForm):
     #     else:
     #         date_joined = self.cleaned_data["date_joined"]
     #     return date_joined
+
+
+class UserActiveForm(forms.ModelForm):
+    is_active = forms.BooleanField(required=True)

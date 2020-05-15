@@ -26,19 +26,21 @@ class UserProfile(AbstractUser):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        # 也可以在form里面写个方法来先加密然后再传到这里入库，那此处的seve方法就可以省略
-        # password = form.cleaned_data['username]
-        # form.instance.password = make_password(password)
-        # form.instance = user = UserProfile.objects.get(pk=pk)
-        print("kwargs:", self.password)
-        print("keys:", self.__dict__)
-        # 如果是创建用户，id号是不存在的，此时就对密码进行加密
-        # 如果是修改用户，id号是有的，此时不对密码进行加密
-        if self.id is None:
-            self.password = make_password(self.password, None, 'pbkdf2_sha256')
-            # 如果是修改密码，那么也对密码进行加密
-        super(UserProfile, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     # 也可以在form里面写个方法来先加密然后再传到这里入库，那此处的seve方法就可以省略
+    #     # password = form.cleaned_data['username]
+    #     # form.instance.password = make_password(password)
+    #     # form.instance = user = UserProfile.objects.get(pk=pk)
+    #     print("kwargs:", self.password)
+    #     print("keys:", self.__dict__)
+    #     # 如果是创建用户，id号是不存在的，此时就对密码进行加密
+    #     # 如果是修改用户，id号是有的，此时不对密码进行加密
+    #     if self.id is None:
+    #         # 如果是修改密码，那么也对密码进行加密
+    #         self.password = make_password(self.password, None, 'pbkdf2_sha256')
+    #         # 存在风险
+    #         self.is_active = 1
+    #     super(UserProfile, self).save(*args, **kwargs)
 
 
 class Bar01(models.Model):
