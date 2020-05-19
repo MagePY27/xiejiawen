@@ -1,0 +1,61 @@
+{% extends "base1.html" %}
+{% block content %}
+<div class="panel">
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="m-b-30">
+                                    <button id="addToTable" class="btn btn-primary waves-effect waves-light">
+                                        <a style="color:white" href="{% url 'users:useraddJsview' %}">增加用户</a>
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-striped" id="datatable-editable">
+                            <thead>
+                            <tr>
+                                <th>账号</th>
+                                <th>密码</th>
+                                <th>手机</th>
+                                <th>性别</th>
+                                <th>用户类型</th>
+                                <th>注册日期</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in object_list %}
+                                <tr>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.password }}</td>
+                                    <td>{{ user.phone }}</td>
+                                    <td>
+                                        {% if user.sex == 0 %}男
+                                        {% elif user.sex == 1 %}女
+                                        {% else %}保密
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if user.user_type == 1 %}普通用户
+                                        {% elif user.user_type == 2 %}会员用户
+                                        {% elif user.user_type == 3 %}超级管理员
+                                        {% else %}非法用户
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ user.date_joined }}</td>
+                                    <td>
+                                        <a href="{% url 'users:usermodJsview' user.id %}" class="on-default edit-row"><i class="fa fa-pencil"></i></a>
+                                        <a href="{% url 'users:userdelJsview' user.id %}" class="on-default remove-row"><i class="fa fa-trash-o"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% include "_pagination.html" %}
+                    </div>
+                    <!-- end: page -->
+
+</div> <!-- end Panel -->
+{% endblock %}
