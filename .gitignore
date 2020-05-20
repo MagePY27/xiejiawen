@@ -1,2 +1,4 @@
 .idea/*
 resources/*
+day08/utils/tasks.py
+day08/utils/task1.py
