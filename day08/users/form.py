@@ -2,7 +2,8 @@ import re
 from django import forms
 from users.models import UserProfile
 from datetime import datetime
-
+from django.contrib.auth import  get_user_model
+User = get_user_model()
 
 # 注意区别Form和ModelForm的区别，ModelForm会有自动创建用户的操作，因此
 # 修改和登录用户所输入的表单应该用Form而不是ModelForm
@@ -139,7 +140,6 @@ class UserCreateForm(forms.ModelForm):
 
 
 class UserModefyForm(forms.ModelForm):
-    is_active = forms.IntegerField(required=True, )
 
     class Meta:
         model = UserProfile
@@ -176,6 +176,16 @@ class UserModefyForm(forms.ModelForm):
             sex = self.cleaned_data["sex"]
         return sex
 
+
+class UserActiveForm(forms.ModelForm):
+    is_active = forms.BooleanField(required=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ['is_active']
+
+    def clean_is_active(self):
+        pass
     # def clean_date_joined(self):
     #     date = datetime.now()
     #     if "date_joined" not in self.cleaned_data.keys():
@@ -184,6 +194,19 @@ class UserModefyForm(forms.ModelForm):
     #         date_joined = self.cleaned_data["date_joined"]
     #     return date_joined
 
+class ResetPasswordForm(forms.ModelForm):
+    password2 = forms.CharField(widget=forms.PasswordInput)
 
-class UserActiveForm(forms.ModelForm):
-    is_active = forms.BooleanField(required=True)
+    class Meta:
+        model = User
+        fields = ('password',)
+
+    # def __init__(self, *args, **kwargs):
+    #     super(ResetPasswordForm, self).__init__(*args, **kwargs)
+
+    def clean_password2(self):
+        password = self.cleaned_data.get('password')
+        password2 = self.cleaned_data.get('password2')
+        if password != password2:
+            raise forms.ValidationError('输入的两次密码不一致，请重新输入！')
+        return password2

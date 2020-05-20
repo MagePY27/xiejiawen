@@ -8,13 +8,14 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.db.models import Q, F
 from django.conf import settings
-from users.form import UserLoginForm, UserCreateForm, UserModefyForm
+from users.form import UserLoginForm, UserCreateForm, UserModefyForm, UserActiveForm, ResetPasswordForm
 from django.views.generic import ListView, UpdateView, DeleteView
 from pure_pagination.mixins import PaginationMixin
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from users.models import UserProfile
+from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.urls import reverse, reverse_lazy
@@ -45,7 +46,7 @@ class IndexView(LoginRequiredMixin, PermissionRequiredMixin, View):
         return render(request, 'index.html')
 
 
-class UserListJsView(LoginRequiredMixin, PermissionRequiredMixin, PaginationMixin,  ListView):
+class UserListJsView(LoginRequiredMixin, PermissionRequiredMixin, PaginationMixin, ListView):
     """
     1.用户列表，可搜索姓名手机号
     """
@@ -86,7 +87,6 @@ class UserListJsView(LoginRequiredMixin, PermissionRequiredMixin, PaginationMixi
         """
         try:
             userForm = UserCreateForm(request.POST)
-            print(type(userForm))
         except:
             res = {"code": 3, "errmsg": "信息填写不完整"}
             return render(request, settings.JUMP_PAGE, res)
@@ -94,8 +94,11 @@ class UserListJsView(LoginRequiredMixin, PermissionRequiredMixin, PaginationMixi
         if userForm.is_valid():
             try:
                 if request.POST.get('agree') == "on":
-                    old_password = userForm.cleaned_data['password']
-                    userForm.cleaned_data['password'] = make_password(old_password, None, 'pbkdf2_sha256')
+                    print(userForm.instance)
+                    print("3:", type(userForm))
+                    print("4:", userForm.cleaned_data)
+                    password = userForm.cleaned_data['password']
+                    userForm.instance.password = make_password(password, None, 'pbkdf2_sha256')
                     userForm.save()
                     res = {"code": 0, "msg": "用户创建成功"}
                     # 用户没有勾选同意按钮
@@ -112,13 +115,20 @@ class UserListJsView(LoginRequiredMixin, PermissionRequiredMixin, PaginationMixi
         return render(request, settings.JUMP_PAGE, res)
 
 
-class UserAddJsView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+class UserAddJsView(LoginRequiredMixin, PermissionRequiredMixin, View):
     # 用户没有通过时跳转的地址，默认是 settings.LOGIN_URL.
     # login_url = '/login/'
     # redirect_field_name = 'redirect_to'
     redirect_field_name = None
-    template_name = 'users/useradd.html'
     permission_required = 'users.add_userprofile'
+
+    def get(self, request):
+        date_today = datetime.datetime.now().strftime("%Y-%m-%d")
+        datadict = {
+            "date_today": date_today
+        }
+        print(datadict)
+        return render(request, 'users/useradd.html', {"data": datadict})
 
 
 class UserDelJsView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -131,7 +141,7 @@ class UserDelJsView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     def post(self, request, **kwargs):
         # 先获取前端传过来的主键
-        pk=kwargs['pk']
+        pk = kwargs['pk']
         # 如果主键不存在，报用户不存在
         print(request.POST.get('comment'))
         if not pk:
@@ -159,6 +169,7 @@ class UserModJsView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
     template_name = 'users/usermod.html'
     # context_object_name = "user"
     permission_required = 'users.change_userprofile'
+
     # 用户没有通过时跳转的地址，默认是 settings.LOGIN_URL.
     # login_url = '/login/'
     # redirect_field_name = 'redirect_to'
@@ -185,13 +196,11 @@ class UserModJsView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
                             userForm.save(commit=True)
                             res = {"code": 0, "msg": "用户状态改变并更新成功"}
                         elif 'is_active' in data.keys():
-                        # 非管理员时，其传is_active字段时，报错（防止前端伪造）
-                        # 此功能为完善，因为is_active为必填项，所以也会被传过来
-                        #　
+                            # 非管理员时，其传is_active字段时，报错（防止前端伪造）
+                            # 此功能为完善，因为is_active为必填项，所以也会被传过来
+                            # 　
                             print("data:::::", data)
-                            userForm.cleaned_data.pop('is_active')
-                            userForm.save()
-                            res = {"code": 0, "msg": "用户信息修改成功"}
+                            res = {"code": 1, "msg": "非法表单"}
                         else:
                             userForm.save(commit=True)
                             res = {"code": 0, "msg": "用户信息更新成功"}
@@ -204,28 +213,9 @@ class UserModJsView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageM
                     res = {"code": 2, "errmsg": userForm.errors}
             except:
                 # 获取更新操作的错误信息
-                logger.error("modefy user error %s"% traceback.format_exc())
+                logger.error("modefy user error %s" % traceback.format_exc())
                 res = {"code": 3, "errmsg": "用户信息更新失败"}
         return render(request, settings.JUMP_PAGE, res)
-
-    # def post(self, request, **kwargs):
-    #     pk = kwargs['pk']
-    #     if not pk:
-    #         res = {"code": 1, "errmsg": "用户不存在"}
-    #     else:
-    #         try:
-    #             data = request.POST.dict()
-    #             print("data:", data)
-    #             if data["agree"] == "on":
-    #                 data = data.pop('agree').pop('confirm_password')
-    #                 User.objects.filter(pk=pk).update(**data)
-    #                 res = {"code": 0, "errmsg": "用户信息更新成功"}
-    #             else:
-    #                 res = {"code": 2 , "errmsg": "用户取消更新操作"}
-    #         except:
-    #             logger.error("更新过程出现异常%s" % traceback.format_exc())
-    #             res = {"code": 3, "errmsg": "更新异常"}
-    #     return render(request, settings.JUMP_PAGE, res)
 
 
 class UserInfoJsView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
@@ -378,18 +368,158 @@ class GroupDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         return reverse_lazy('users:group_list')
 
 
-class UserActiveView(LoginRequiredMixin, TemplateView):
+class UserActiveView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DetailView):
     """
     激活用户：
     1.只有管理员才可以进行操作
     2.防止注入待完善
     """
+    model = UserProfile
+    permission_required = ['users.enable_user', 'users.disable_user']
     template_name = 'users/useractive.html'
+
+    def post(self, request, **kwargs):
+        # 先获取用户id
+        pk = kwargs['pk']
+        if not pk:
+            res = {"code": 1, "errmsg": "用户不存在"}
+            return render(request, settings.JUMP_PAGE, res)
+        else:
+            try:
+                user = self.model.objects.get(pk=pk)
+                if request.POST['agree'] == 'on':
+                    print('post', request.POST)
+                    print(request.POST['is_active'])
+                    user.is_active = request.POST['is_active']
+                    user.save()
+                    # 如果is_active为1表示已激活，或本来就是激活状态
+                    if request.POST['is_active'] == '1':
+                        res = {"code": 0, "msg": "用户已启用"}
+                    else:
+                        res = {"code": 0, "msg": "用户已禁用"}
+                else:
+                    res = {"code": 2, "errmsg": "表单不完整，操作已被取消"}
+            except Exception as e:
+                logger.error("操作失败: %s" % traceback.format_exc())
+                res = {"code": 1, "errmsg": "操作失败"}
+            return render(request, settings.JUMP_PAGE, res)
+
+
+class UserPermListView(LoginRequiredMixin, PermissionRequiredMixin,PaginationMixin, ListView):
+    template_name = 'users/user_permlist.html'
+    model = UserProfile
+    paginate_by = 5
+    permission_required = 'users.view_userprofile'
+    keyword = None
+
+    def get_keyword(self):
+        self.keyword = self.request.GET.get('keyword')
+        return self.keyword
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        keyword = self.get_keyword()
+        if keyword:
+            queryset = queryset.filter(username__icontains=keyword)
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['keyword'] = self.keyword
+        return context
+
+
+class UserGroupView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    """
+    更新用户组信息（加入组，退出组）
+    """
+    template_name = 'users/user_newgrp.html'
+    model = User
+    fields = ('groups',)
+    success_message = '加入或退出组成功！'
+    permission_required = 'users.change_userprofile'
+    context_object_name = 'username'
+
+    def get_success_url(self):
+        if '_addanother' in self.request.POST:
+            return reverse('users:user_group_update', kwargs={'pk': self.kwargs.get('pk')})
+        return reverse('users:userlistJsview')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        groups = Group.objects.all()
+        context['groups'] = groups
+        return context
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        #u.groups.set(form.cleaned_data['groups'])
+        return super(UserGroupView, self).form_valid(form)
+
+
+class UserPermissionUpdateView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    """
+    更新用户权限
+    """
+    template_name = 'users/user_permission_update.html'
+    model = User
+    fields = ('user_permissions',)
+    success_message = '用户权限编辑成功！'
+    permission_required = 'users.change_userprofile'
+    context_object_name = 'username'
+
+    def get_success_url(self):
+        if '_addanother' in self.request.POST:
+            return reverse('users:user_perm_update', kwargs={'pk': self.kwargs.get('pk')})
+        return reverse('users:userlistJsview')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        permissions = Permission.objects.exclude(Q(content_type__model='session') |
+                                                 Q(content_type__model='contenttype') |
+                                                 Q(content_type__model='logentry')
+                                                 ).values('id', 'name',
+                                                          'content_type__model', 'content_type__app_label',
+                                                          'codename')
+        context['permissions'] = permissions
+        return context
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super(UserPermissionUpdateView, self).form_valid(form)
+
+
+class ResetPasswordView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    """
+    管理员重置密码
+    """
+    template_name = 'users/reset_password.html'
+    model = User
+    form_class = ResetPasswordForm
+    # fields = ('password',)
+    permission_required = 'users.change_userprofile'
+    success_message = '重置密码成功！'
+
+    def get_success_url(self):
+        return reverse('users:userlistJsview')
+
+    def form_valid(self, form):
+        password = form.cleaned_data.get('password')
+        print(password)
+        # password = make_password(password)
+        # user.password = password
+        # user.save()
+        self.object.set_password(password) #包含加密过程
+        self.object.save()
+        return super(ResetPasswordView, self).form_valid(form)
+
+
+class test(TemplateView):
+    template_name = 'users/icons.html'
     # context_object_name = 'user'
     # model = UserProfile
     # permission_required = 'perms.users.view_userprofile'
     # permission_required = 'perms.auth.change_permission, perms.auth.change_contenttype, perms.auth.add_contenttype, perms.auth.view_contenttype '
-
 
 # class IndexJsView(DetailView):
 #     template_name = 'dashboard/index.html'

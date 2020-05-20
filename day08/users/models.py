@@ -26,6 +26,26 @@ class UserProfile(AbstractUser):
     def __str__(self):
         return self.name
 
+
+class Permission_list(models.Model):
+    """
+    权限列表
+    """
+    name = models.CharField(max_length=255, null=True, )
+    created_at = models.DateTimeField(db_index=True, auto_now_add=True, verbose_name='创建时间')
+    # updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
+    class Meta:
+        verbose_name = '附加权限表'
+        # ordering = ("-created_at",)
+        # default_permissions = ()
+        permissions = (
+            ('enable_user', '激活用户'),
+            ('disable_user', '禁用用户'),
+            ('reset_password', '重置密码'),
+        )
+
+
     # def save(self, *args, **kwargs):
     #     # 也可以在form里面写个方法来先加密然后再传到这里入库，那此处的seve方法就可以省略
     #     # password = form.cleaned_data['username]
@@ -41,21 +61,3 @@ class UserProfile(AbstractUser):
     #         # 存在风险
     #         self.is_active = 1
     #     super(UserProfile, self).save(*args, **kwargs)
-
-
-class Bar01(models.Model):
-    """
-    权限测试
-    """
-    name = models.CharField(max_length=255, null=True, )
-    created_at = models.DateTimeField(db_index=True, auto_now_add=True, verbose_name='创建时间')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
-
-    class Meta:
-        ordering = ("-created_at",)
-        default_permissions = ()
-        permissions = (
-            ('view_bar01', '查看表'),
-            ('add_bar01', '添加看表'),
-        )
-
