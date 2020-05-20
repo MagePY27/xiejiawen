@@ -1,23 +1,25 @@
-{% extends 'base1.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block title %}
     首页
 {% endblock %}
 
-
-{% block content %}
+{% block page-title %}
+    仪表盘
+{% endblock %}
+{% block page-content %}
     <div class="row">
         <div class="col-lg-3 col-sm-6">
             <div class="widget-panel widget-style-2 white-bg">
                 <i class="ion-android-social-user text-pink"></i>
-                <h2 class="m-0 counter">{{ data.users }}</h2>
+                <h2 class="m-0 counter">50</h2>
                 <div>用户数</div>
             </div>
         </div>
         <div class="col-lg-3 col-sm-6">
             <div class="widget-panel widget-style-2 white-bg">
                 <i class="fa fa-desktop text-purple"></i>
-                <h2 class="m-0 counter">{{ data.hosts }}</h2>
+                <h2 class="m-0 counter">8956</h2>
                 <div>资产数</div>
             </div>
         </div>
@@ -31,7 +33,7 @@
         <div class="col-lg-3 col-sm-6">
             <div class="widget-panel widget-style-2 white-bg">
                 <i class="fa fa-tags text-success"></i>
-                <h2 class="m-0 counter">{{ data.tags }}</h2>
+                <h2 class="m-0 counter">30</h2>
                 <div>标签数</div>
             </div>
         </div>
@@ -87,95 +89,5 @@
         </div> <!-- end col -->
 
     </div> <!-- End row -->
-{% endblock %}
-{% block js2 %}
-<script src="/static/assets/echarts/echarts.min.js"></script>
-<script src="/static/assets/echarts/theme/macarons.js"></script>
- <script>
-        var WorkOrderChart = echarts.init(document.getElementById('user-nums'), 'macarons');
-        WorkOrderOption = {
-            tooltip: {
-                trigger: 'axis',
-                formatter: "{b0} <br/>{a0} : {c0}"
-
-            },
-            toolbox: {
-                show: true,
-                feature: {
-                    dataZoom: {show: true},  //数据缩放
-                    dataView: {show: true, readOnly: false},                // 数据视图
-                    magicType: {show: true, type: ['line', 'bar', 'tiled']}, //图形切换
-                    restore: {show: true},           // 数据复原
-                    saveAsImage: {show: true}        // 图形以图片形式保存到本地
-                }
-            },
-            legend: {
-                orient: 'vertical',
-                x: 'left',
-                data: ['活跃用户数']
-
-            },
-            xAxis: {
-                type: 'category',
-                data: ['2019-12-02', '2019-12-03', '2019-12-04', '2019-12-05', '2019-12-06', '2019-12-07', '2019-12-08', '2019-12-09']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [{
-                name: '活跃用户数',
-                data: [30, 28, 33, 25, 20, 40, 35, 38],
-                type: 'line',
-                     itemStyle: {   // 系列级个性化样式，纵向渐变填充
-                        normal: {
-                            color:'#1ab394'
-                        }
-                    },
-                smooth: true
-            }]
-        };
-        WorkOrderChart.setOption(WorkOrderOption);
-    </script>
-    <script>
-        var PostChart = echarts.init(document.getElementById('task-nums'), 'macarons');
-        PostOption = {
-            tooltip: {
-                trigger: 'axis',
-                formatter: "{b0} <br/>{a0} : {c0}"
-
-            },
-            toolbox: {
-                show: true,
-                feature: {
-                    dataZoom: {show: true},  //数据缩放
-                    dataView: {show: true, readOnly: false},                // 数据视图
-                    magicType: {show: true, type: ['line', 'bar', 'tiled']}, //图形切换
-                    restore: {show: true},           // 数据复原
-                    saveAsImage: {show: true}        // 图形以图片形式保存到本地
-                }
-            },
-            legend: {
-                orient: 'vertical',
-                x: 'left',
-                data: ['发布次数']
-
-            },
-            xAxis: {
-                type: 'category',
-                data: ['2019-12-02', '2019-12-03', '2019-12-04', '2019-12-05', '2019-12-06', '2019-12-07', '2019-12-08', '2019-12-09']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [{
-                name: '发布次数',
-                data: [3, 4, 2, 5, 8, 3, 0, 6],
-                type: 'bar',
-                smooth: true
-            }]
-        };
-        PostChart.setOption(PostOption);
-    </script>
-
 {% endblock %}
 

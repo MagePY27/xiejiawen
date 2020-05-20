@@ -11,6 +11,8 @@ class LoginForm(forms.Form):
     password = forms.CharField(required=True, error_messages={'required': '密码不能为空'})
 
 
+
+
 class PwdModForm(forms.ModelForm):
     password_new = forms.CharField(required=True, error_messages={'required': '密码不能为空'})
     password_new_confirm = forms.CharField(required=True, error_messages={'required': '密码不能为空'})
@@ -55,3 +57,4 @@ class PwdModForm(forms.ModelForm):
                     raise forms.ValidationError("密码太长或太短", code="invalid")
                 else:
                     return password_new_confirm
+

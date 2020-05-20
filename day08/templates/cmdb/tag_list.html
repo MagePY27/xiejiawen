@@ -1,15 +1,19 @@
 {% extends 'base1.html' %}
-{% load user_tags %}
-{% block title %}
-    角色列表
-{% endblock %}
+{% block js1 %}
 
+{% endblock %}
+{% block title %}
+    标签列表
+{% endblock %}
+{% block page-title %}
+    标签列表
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">查看组列表</h3>
+                    <h3 class="panel-title">查看标签列表</h3>
                 </div>
                 <div class="panel-body">
                     {% if messages %}
@@ -20,21 +24,19 @@
                             </div>
                         {% endfor %}
                     {% endif %}
-
                     <div class="row" style="margin-bottom: 5px">
-                        {% if perms.auth.add_group %}
-                        <div class="col-md-1"><a href="{% url 'users:group_add' %}" class="btn btn-primary">添加组 <i class="fa fa-plus"></i></a></div>
+                        {% if perms.cmdb.add_tag %}
+                            <div class="col-md-1"><a href="{% url 'cmdb:tag-add' %}" class="btn btn-primary">添加标签</a></div>
                         {% endif %}
-
                         <div class="col-md-2" style="float: right">
                             <form class="form-horizontal" role="form">
-
                                     <div class="input-group">
-                                        <input type="text" id="keyword" name="keyword" value="{{ keyword|default_if_none:'' }}" class="form-control" placeholder="关键字">
+                                        <input type="text" id="keyword" name="keyword" class="form-control"  value="{{ keyword|default_if_none:'' }}" placeholder="关键字">
                                         <span class="input-group-btn">
                                         <button type="submit" class="btn btn-effect-ripple btn-primary">搜索</button>
                                         </span>
                                     </div>
+
                             </form>
                         </div>
                     </div>
@@ -43,28 +45,28 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>组名</th>
-                                        <th>用户</th>
-                                        <th>权限</th>
-                                        {% if perms.auth.change_group or perms.auth.delete_group %}
+                                        <th>标签名称</th>
+                                        <th>中文名称</th>
+                                        <th>类型</th>
+                                        {% if perms.cmdb.change_tag or perms.cmdb.delete_tag %}
                                         <th>动作</th>
                                         {% endif %}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                  {% for group in page_obj.object_list %}
+                                  {% for tag in page_obj.object_list %}
                                     <tr>
-                                        <td>{{ group.name }}</td>
-                                        <td title="{{ group.user_set.all }}">{{ group.user_set.all|get_names|cut:30 }}</td>
-                                        <td title="{{ group.permissions.all|get_names }}">{{ group.permissions.all|get_names|cut:30 }}</td>
-                                        {% if perms.auth.change_group or perms.group.delete_group %}
+                                        <td>{{ tag.name }}</td>
+                                        <td>{{ tag.name_cn }}</td>
+                                        <td>{{ tag.type.name_cn }}</td>
+                                        {% if perms.cmdb.change_tag or perms.cmdb.delete_tag %}
                                         <td>
-                                            {% if perms.auth.change_group %}
-                                            <a href="{% url 'users:group_add_user' group.id %}" class="btn btn-info btn-xs">加用户</a>
-                                            <a href="{% url 'users:group_update' group.id %}" class="btn btn-primary btn-xs">编辑</a>
+                                            {% if perms.cmdb.change_tag %}
+
+                                            <a href="{% url 'cmdb:tag-edit' tag.id %}" class="btn btn-primary btn-xs">编辑</a>
                                             {% endif %}
-                                            {% if perms.auth.delete_group %}
-                                             <a href="{% url 'users:group_delete' group.id %}" class="btn btn-danger btn-xs">删除</a>
+                                            {% if perms.cmdb.delete_tag  %}
+                                            <a href="{% url 'cmdb:tag-delete' tag.id %}" class="btn btn-danger btn-xs">删除</a>
                                             {% endif %}
                                         </td>
                                         {% endif %}
@@ -81,7 +83,7 @@
                         </div>
                         <div class="col-md-8">
                              {% if page_obj.paginator.num_pages > 1 %}
-                                {% include '_paginator.html' %}
+                                {% include '_pagination.html' %}
                              {% endif %}
                         </div>
                     </div>
@@ -91,9 +93,9 @@
         </div>
     </div>
 {% endblock %}
-{% block js %}
-    <script>
-        $('.user').addClass('active');
-        $('.user .groups').addClass('active');
+{% block js2 %}
+        <script>
+        $('.taggit').addClass('active');
+        $('.taggit .tags').addClass('active');
     </script>
 {% endblock %}

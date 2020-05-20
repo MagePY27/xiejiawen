@@ -86,6 +86,7 @@ class UserPwdView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
                     is_correct = check_password(request.POST['password'], old_password_str)
                     print(is_correct)
                     if is_correct:
+                            # 勾选确认按钮后才能修改密码
                         if request.POST.get('change_password') == 'on':
                             # 加密密码， 然后入库
                             password_new = make_password(request.POST['password_new'], None, 'pbkdf2_sha256')

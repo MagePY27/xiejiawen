@@ -73,25 +73,12 @@
                                         </div>
                                         {% if request.user.username == 'admin' %}
                                         <div class="form-group ">
-                                            <label for="is_active" class="control-label col-lg-2">激活用户 *</label>
-                                            <div class="col-lg-10">
-                                                {% if object.is_active == 0 %}
-                                                    <input type="radio" name="is_active" value=0 checked>禁用
-                                                    <input type="radio" name="is_active" value=1 >启用
-                                                    {% elif object.is_active == 1 %}
-                                                    <input type="radio" name="is_active" value=0 >禁用
-                                                    <input type="radio" name="is_active" value=1 checked>启用
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        {% else %}
-                                        <div class="form-group ">
                                             <label for="is_active" class="control-label col-lg-2">用户状态 *</label>
                                             <div class="col-lg-10">
                                                 {% if object.is_active == 0 %}
-                                                    <input type="radio" name="is_active" value=0 checked >禁用
+                                                    <input type="radio" name="is_active" value=0 checked disabled>禁用
                                                     {% elif object.is_active == 1 %}
-                                                    <input type="radio" name="is_active" value=1 checked >启用
+                                                    <input type="radio" name="is_active" value=1 checked disabled>启用
                                                 {% endif %}
                                             </div>
                                         </div>
