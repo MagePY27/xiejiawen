@@ -15,6 +15,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from users.models import UserProfile
+from cmdb.models import Host, Tag, Type
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth import authenticate, login, logout, get_user_model
@@ -35,15 +36,32 @@ class IndexView(LoginRequiredMixin, PermissionRequiredMixin, View):
     redirect_field_name = None
     permission_required = 'users.view_userprofile'
 
+
     def get(self, request):
+        users = UserProfile.objects.count()
+        hosts = Host.objects.count()
+        tags = Tag.objects.count()
+        data = {
+            "users": users,
+            "hosts": hosts,
+            "tags": tags
+        }
         # print(request.user)
         # print(request.user.is_authenticated)
         # if not request.user.is_authenticated:
         #     return HttpResponseRedirect(reverse("accounts:login"))
-        return render(request, 'index.html')
+        return render(request, 'index.html', {"data": data})
 
     def post(self, request):
-        return render(request, 'index.html')
+        users = UserProfile.objects.all()
+        hosts = Host.objects.all()
+        tags = Tag.objects.all()
+        data = {
+            "users": users,
+            "hosts": hosts,
+            "tags": tags
+        }
+        return render(request, 'index.html', {"data": data})
 
 
 class UserListJsView(LoginRequiredMixin, PermissionRequiredMixin, PaginationMixin, ListView):
@@ -123,7 +141,7 @@ class UserAddJsView(LoginRequiredMixin, PermissionRequiredMixin, View):
     permission_required = 'users.add_userprofile'
 
     def get(self, request):
-        date_today = datetime.datetime.now().strftime("%Y-%m-%d")
+        date_today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         datadict = {
             "date_today": date_today
         }

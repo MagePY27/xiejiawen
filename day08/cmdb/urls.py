@@ -16,4 +16,9 @@ urlpatterns = [
     path('tags_add/', TagAddView.as_view(), name='tag-add'),
     re_path('tags_edit/(?P<pk>[0-9]+)?/', TagEditView.as_view(), name='tag-edit'),
     re_path('tags_delete/(?P<pk>[0-9]+)?/', TagDeleteView.as_view(), name='tag-delete'),
+
+    path('hosts/', HostListView.as_view(), name='hosts'),
+    path('get_host/', AliyunSDK.as_view(), name='get_host'),
+    path('stop_host/(?P<pk>[0-9]+)?/', StopHostView.as_view(), name='stop_host'),
+    path('start_host/(?P<pk>[0-9]+)?/', StartHostView.as_view(), name='start_host'),
 ]

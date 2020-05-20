@@ -75,10 +75,11 @@
                         </ul>
                     </li>
                     {% endif %}
-                    <li class="has-submenu"><a href="#"><i class="ion-stats-bars"></i> <span class="nav-label">资产管理</span><span class="badge bg-purple">1</span></a>
+                    <li class="has-submenu"><a href="#"><i class="ion-stats-bars"></i> <span class="nav-label">资产管理</span></a>
                         <ul class="list-unstyled">
                             <li><a href="{% url 'cmdb:types' %}">标签类型管理</a></li>
                             <li><a href="{% url 'cmdb:tags' %}">标签管理</a></li>
+                            <li><a href="{% url 'cmdb:hosts' %}">主机列表</a></li>
                         </ul>
                     </li>
                 </ul>
