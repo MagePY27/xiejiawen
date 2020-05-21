@@ -1,16 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q
-from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import View, ListView, CreateView, UpdateView, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
 from pure_pagination.mixins import PaginationMixin
-from utils.tasks import get_hosts_from_aliyun
-from cmdb.models import Tag, Type, Host
+from cmdb.models import Type, Host
 from django.conf import settings
-from utils.tasks import ECSHandler
+from utils.alisdk import ECSHandler
 from utils.Aliyun_key import ALICLOUD
 
 
@@ -144,7 +142,7 @@ class StopHostView(View):
             new_flush = AliyunSDK()
             new_flush.get(request)
         else:
-            res = {"code": 1, "errmsg": "主机已关机或正在关机，无需重复操作~"}
+            res = {"code": 1, "errmsg": "服务器繁忙，请稍后重试"}
         return render(request, settings.JUMP_PAGE, res)
 
 
@@ -156,11 +154,13 @@ class StartHostView(View):
         instance = Host.objects.get(instance_id=kwargs['pk'])
         if instance.status == "Running":
             res = {"code": 1, "errmsg": "主机正在运行，无需启动~"}
-        else:
+        elif instance.status == "Stopped":
             ecs.start_host(kwargs['pk'])
             res = {"code": 0, "msg": "操作成功，正在启动~"}
             new_flush = AliyunSDK()
             new_flush.get(request)
+        else:
+            res = {"code": 2, "errmsg": "服务器繁忙，请稍后重试！"}
         return render(request, settings.JUMP_PAGE, res)
 
 
