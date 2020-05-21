@@ -8,10 +8,10 @@ from django.views.generic import View, ListView, CreateView, UpdateView, DeleteV
 from django.contrib.messages.views import SuccessMessageMixin
 from pure_pagination.mixins import PaginationMixin
 from utils.tasks import get_hosts_from_aliyun
-from utils.stop_instance import stop_host
-from utils.start_instance import start_host
 from cmdb.models import Tag, Type, Host
 from django.conf import settings
+from utils.tasks import ECSHandler
+from utils.Aliyun_key import ALICLOUD
 
 
 class TypeListView(LoginRequiredMixin, PermissionRequiredMixin, PaginationMixin, ListView):
@@ -117,24 +117,34 @@ class AliyunSDK(LoginRequiredMixin, PermissionRequiredMixin, View):
     permission_required = 'cmdb.change_host'
 
     def get(self, request):
-        instance = get_hosts_from_aliyun()
-        is_oldhost = Host.objects.filter(public_ip=instance['public_ip'], private_ip=instance['private_ip'])
-        if not is_oldhost:
-            Host.objects.create(**instance)
-            res = {"code": 0, "msg": "主机列表刷新成功，有新增主机{}".format(instance['hostname'])}
-        else:
-            Host.objects.update(**instance)
-            # object_list = Host.objects.all()
-            res = {"code": 0, "msg": "刷新完成，主机数不变~"}
-        return render(request, settings.JUMP_PAGE, res)
+        ecs = ECSHandler(ALICLOUD['access_key_id'], ALICLOUD['access_key'], ALICLOUD['region'])
+        # return data, True, len(instances) >= page_size
+        instances = ecs.get_instances()[0]
+        for instance in instances:
+            is_oldhost = Host.objects.filter(public_ip=instance['public_ip'], private_ip=instance['private_ip'])
+            if not is_oldhost:
+                Host.objects.create(**instance)
+                res = {"code": 0, "msg": "主机列表刷新成功，有新增主机{}".format(instance['hostname'])}
+            else:
+                Host.objects.update(**instance)
+                # object_list = Host.objects.all()
+                res = {"code": 0, "msg": "刷新完成，主机数不变~"}
+            return render(request, settings.JUMP_PAGE, res)
 
 
 class StopHostView(View):
     model = Host
 
     def get(self, request, **kwargs):
-        stop_host(kwargs['pk'])
-        res = {"code": 0, "msg": "操作成功，正在关机~"}
+        ecs = ECSHandler(ALICLOUD['access_key_id'], ALICLOUD['access_key'], ALICLOUD['region'])
+        instance = Host.objects.get(instance_id=kwargs['pk'])
+        if instance.status == "Running":
+            ecs.stop_host(kwargs['pk'])
+            res = {"code": 0, "msg": "操作成功，正在关机~"}
+            new_flush = AliyunSDK()
+            new_flush.get(request)
+        else:
+            res = {"code": 1, "errmsg": "主机已关机或正在关机，无需重复操作~"}
         return render(request, settings.JUMP_PAGE, res)
 
 
@@ -142,6 +152,34 @@ class StartHostView(View):
     model = Host
 
     def get(self, request, **kwargs):
-        start_host(kwargs['pk'])
-        res = {"code": 0, "msg": "操作成功，正在启动~"}
+        ecs = ECSHandler(ALICLOUD['access_key_id'], ALICLOUD['access_key'], ALICLOUD['region'])
+        instance = Host.objects.get(instance_id=kwargs['pk'])
+        if instance.status == "Running":
+            res = {"code": 1, "errmsg": "主机正在运行，无需启动~"}
+        else:
+            ecs.start_host(kwargs['pk'])
+            res = {"code": 0, "msg": "操作成功，正在启动~"}
+            new_flush = AliyunSDK()
+            new_flush.get(request)
+        return render(request, settings.JUMP_PAGE, res)
+
+
+class RebootHostView(View):
+    model = Host
+
+    def get(self, request, **kwargs):
+        ecs = ECSHandler(ALICLOUD['access_key_id'], ALICLOUD['access_key'], ALICLOUD['region'])
+        instance = Host.objects.get(instance_id=kwargs['pk'])
+        if instance.status == "Running":
+            ecs.reboot_host(kwargs['pk'])
+            res = {"code": 0, "msg": "操作成功，正在重新启动~"}
+            new_flush = AliyunSDK()
+            new_flush.get(request)
+        elif instance.status == "Stopped":
+            ecs.start_host(kwargs['pk'])
+            res = {"code": 0, "msg": "操作成功~"}
+            new_flush = AliyunSDK()
+            new_flush.get(request)
+        else:
+            res = {"code": 1, "msg": "服务器繁忙，请稍后再试~"}
         return render(request, settings.JUMP_PAGE, res)

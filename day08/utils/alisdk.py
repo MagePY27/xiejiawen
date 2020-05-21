@@ -9,6 +9,9 @@ from aliyunsdkecs.request.v20140526 import DescribeDisksRequest
 from aliyunsdkecs.request.v20140526 import DescribeImagesRequest
 from aliyunsdkrds.request.v20140815.DescribeSlowLogRecordsRequest import DescribeSlowLogRecordsRequest
 from aliyunsdkrds.request.v20140815.DescribeDBInstanceAttributeRequest import DescribeDBInstanceAttributeRequest
+from aliyunsdkecs.request.v20140526.StopInstanceRequest import StopInstanceRequest
+from aliyunsdkecs.request.v20140526.StartInstanceRequest import StartInstanceRequest
+from aliyunsdkecs.request.v20140526.RebootInstanceRequest import RebootInstanceRequest
 
 
 class ECSHandler(object):
@@ -105,7 +108,35 @@ class ECSHandler(object):
             'zone_id': instance['ZoneId'],
         }
 
+    def stop_host(self, instance_id):
+        client = AcsClient(self.access_key_id, self.secret_access_key, self.region_id)
 
+        request = StopInstanceRequest()
+        request.set_accept_format('json')
+        request.set_InstanceId(instance_id)
+        response = client.do_action_with_exception(request)
+        # python2:  print(response)
+        print(str(response, encoding='utf-8'))
+
+    def start_host(self, instance_id):
+        client = AcsClient(self.access_key_id, self.secret_access_key, self.region_id)
+
+        request = StartInstanceRequest()
+        request.set_accept_format('json')
+        request.set_InstanceId(instance_id)
+        response = client.do_action_with_exception(request)
+        # python2:  print(response)
+        print(str(response, encoding='utf-8'))
+
+    def reboot_host(self, instance_id):
+        client = AcsClient(self.access_key_id, self.secret_access_key, self.region_id)
+
+        request = RebootInstanceRequest()
+        request.set_accept_format('json')
+        request.set_InstanceId(instance_id)
+        response = client.do_action_with_exception(request)
+        # python2:  print(response)
+        print(str(response, encoding='utf-8'))
 
 class AliYunRDS:
     def __init__(self, access_key, access_secret, region):

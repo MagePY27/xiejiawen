@@ -19,6 +19,7 @@ urlpatterns = [
 
     path('hosts/', HostListView.as_view(), name='hosts'),
     path('get_host/', AliyunSDK.as_view(), name='get_host'),
-    path('stop_host/(?P<pk>[0-9]+)?/', StopHostView.as_view(), name='stop_host'),
-    path('start_host/(?P<pk>[0-9]+)?/', StartHostView.as_view(), name='start_host'),
+    re_path('stop_host/(?P<pk>[0-9a-z-]+)?/', StopHostView.as_view(), name='stop_host'),
+    re_path('start_host/(?P<pk>[0-9a-z-]+)?/', StartHostView.as_view(), name='start_host'),
+    re_path('reboot_host/(?P<pk>[0-9a-z-]+)?/', RebootHostView.as_view(), name='reboot_host'),
 ]

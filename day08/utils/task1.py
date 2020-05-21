@@ -6,7 +6,7 @@ from aliyunsdkcore.acs_exception.exceptions import ClientException
 from aliyunsdkcore.acs_exception.exceptions import ServerException
 from aliyunsdkvpc.request.v20160428.ActivateRouterInterfaceRequest import ActivateRouterInterfaceRequest
 
-client = AcsClient('LTAI4GFELsoox7E1NsKLNnfz', 'PS0Dwg5KjPnO4ivk9YeHinQ5lDLcCp', 'cn-hangzhou')
+client = AcsClient('LTAI4G25yYUUkAUNnMK7dkTe', '5qlaC0BhzycSkSGHDjJm2V39q0UC74', 'cn-hangzhou')
 
 request = ActivateRouterInterfaceRequest()
 request.set_accept_format('json')
