@@ -33,5 +33,5 @@
 ![标签类型](https://github.com/MagePY27/xiejiawen/blob/master/day08/static/pro_picture/tag_type_list.jpg)
 ![标签列表](https://github.com/MagePY27/xiejiawen/blob/master/day08/static/pro_picture/tag_list.jpg)
 ![添加标签类型](https://github.com/MagePY27/xiejiawen/blob/master/day08/static/pro_picture/add_tag_type.jpg)
-![添加标签](https://github.com/MagePY27/xiejiawen/blob/master/day08/static/pro_picture/add_tag.jpg)
+![添加标签](https://github.com/MagePY27/xiejiawen/blob/master/day08/static/pro_picture/add_a_tag.jpg)
 ![主机信息表](https://github.com/MagePY27/xiejiawen/blob/master/day08/static/pro_picture/host_info_and_manage.jpg)
