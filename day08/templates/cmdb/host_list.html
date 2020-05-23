@@ -47,7 +47,7 @@
                             <th>本地ip</th>
                             <th>过期时间</th>
                             <th>系统类型</th>
-                            <th>系统名称</th>
+                            <th>系统版本</th>
                             <th>内存</th>
                             <th>cpu数</th>
                             <th>操作</th>
@@ -67,7 +67,7 @@
                             <td>{{ object.cpu }}核</td>
                             <td>
                                 <a href="{% url 'cmdb:start_host' object.instance_id %}" class="btn btn-primary btn-xs">开机</a>
-                                <a href="#" class="btn btn-warning btn-xs">重启</a>
+                                <a href="{% url 'cmdb:reboot_host' object.instance_id %}" class="btn btn-warning btn-xs">重启</a>
                                 <a href="{% url 'cmdb:stop_host' object.instance_id %}" class="btn btn-inverse btn-xs">关机</a>
                             </td>
                         </tr>
