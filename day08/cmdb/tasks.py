@@ -2,11 +2,7 @@ from day08.celery import app
 from cmdb.models import Host
 from utils.alisdk import ECSHandler
 import time
-
-ALICLOUD = {
-   'access_key': ('LTAI4G1aNcr6pRTwRLEn6T9H','ZGxVgA4KjSft6aVvbqzKl1DSBazzgm'),
-   'region': 'cn-beijing'
-}
+from utils.Aliyun_key import ALICLOUD
 
 @app.task(name='测试任务')
 def file(): 
@@ -16,7 +12,7 @@ def file():
     print("111")
     t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
     s = "Life is short,you need Python %s \r\n" % t
-    f = open("/tmp/task.txt", 'a')
+    f = open("logs/celery/task.log", 'a+')
     f.write(s)
     f.close()
     return 'Test is OK'
@@ -35,13 +31,12 @@ def get_hosts_from_aliyun():
     从阿里云获取ECS实例并入库
     :return:
     """
-    ecs = ECSHandler(*ALICLOUD['access_key'], ALICLOUD['region'])
+    ecs = ECSHandler(ALICLOUD['access_key_id'], ALICLOUD['access_key'], ALICLOUD['region'])
     page = 1
     while True:
         instances, exception, next_page = ecs.get_instances(page=page, page_size=10)
         print(instances)
-        # print(exception)
-        # print(next_page)
+
         if instances:
             for i in instances:
                 i['public_cloud'] = 'aliyun'
