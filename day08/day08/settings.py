@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import djcelery
+
+
+
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,7 +45,9 @@ INSTALLED_APPS = [
     'users',
     'users.templatetags',
     'accounts',
+    'djcelery',
     'cmdb',
+
 ]
 
 MIDDLEWARE = [
@@ -138,4 +145,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 JUMP_PAGE = 'jump.html'
-LOGIN_URL='/accounts/login/'
+LOGIN_URL = '/accounts/login/'
+
+
+djcelery.setup_loader()
+BROKER_URL = 'redis://192.168.99.105:6379/0'     # redis作为中间件
+BROKER_TRANSPORT = 'redis'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler' # Backend数据库
+
+CELERYD_LOG_FILE = BASE_DIR + "/logs/celery/celery.log"         # log路径
+CELERYBEAT_LOG_FILE = BASE_DIR + "/logs/celery/beat.log"        # beat log路径

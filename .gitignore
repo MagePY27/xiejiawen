@@ -3,3 +3,4 @@ resources/*
 .idea/xiejiawen.iml
 utils/Aliyun_key.py
 utils/tasks.py
+/day08/utils/Aliyun_key.py

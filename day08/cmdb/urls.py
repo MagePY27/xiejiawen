@@ -6,6 +6,7 @@ from cmdb.tag import *
 app_name='cmdb'
 urlpatterns = [
     # path('', views.test, name='test'),
+    path('index/', IndexView.as_view(), name='index'),
 
     path('types/', TypeListView.as_view(), name='types'),
     path('types_add/', TypeAddView.as_view(), name='type-add'),
@@ -22,4 +23,8 @@ urlpatterns = [
     re_path('stop_host/(?P<pk>[0-9a-z-]+)?/', StopHostView.as_view(), name='stop_host'),
     re_path('start_host/(?P<pk>[0-9a-z-]+)?/', StartHostView.as_view(), name='start_host'),
     re_path('reboot_host/(?P<pk>[0-9a-z-]+)?/', RebootHostView.as_view(), name='reboot_host'),
+
+    re_path('hosts_tags_add/(?P<pk>[0-9]+)?/', HostTagAddView.as_view(), name='host-tags-add'),
+    re_path('tags_addhosts/(?P<pk>[0-9]+)?/', HostAddByTagView.as_view(), name='add-hosts'),
+    path('update_host_info/', update_host_info, name='update-host-info'),
 ]

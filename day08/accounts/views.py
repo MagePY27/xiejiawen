@@ -112,7 +112,7 @@ class UserPwdView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
 class PermListView(LoginRequiredMixin, PermissionRequiredMixin,PaginationMixin, ListView):
     template_name = 'accounts/permlist.html'
     model = Permission
-    paginate_by = 4
+    paginate_by = 20
     permission_required = 'auth.view_permission'
     keyword = None
 
