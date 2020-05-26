@@ -24,6 +24,14 @@
 <div class="row">
     <div class="col-lg-12">
         <ul class="nav nav-tabs">
+            {% if perms.cmdb.view_host or perms.cmdb.view_database %}
+                <li class="">
+                    <a href="{% url 'cmdb:overview' %}"  aria-expanded="false">
+                        <span class="visible-xs"><i class="fa fa-home"></i></span>
+                        <span class="hidden-xs">总览</span>
+                    </a>
+                </li>
+                {% endif %}
             {% if perms.cmdb.view_host %}
             <li class="active">
                 <a href="{% url 'cmdb:hosts' %}" aria-expanded="true">

@@ -4,6 +4,7 @@ from utils.alisdk import ECSHandler
 import time
 from utils.Aliyun_key import ALICLOUD
 
+
 @app.task(name='测试任务')
 def file(): 
     """
@@ -25,6 +26,7 @@ def useradd(username):
     """
     print(username)
     return username
+
 
 def get_hosts_from_aliyun():
     """
@@ -66,3 +68,7 @@ def update_hosts_from_cloud():
         return '更新资产信息失败'
 
 
+@app.task(name='统计资产')
+def get_assets_from_cloud():
+
+    pass

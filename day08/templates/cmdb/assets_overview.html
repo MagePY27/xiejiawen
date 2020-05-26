@@ -34,14 +34,6 @@
                     </a>
                 </li>
                 {% endif %}
-                {% if perms.cmdb.view_database %}
-                <li class="">
-                    <a href="{% url 'cmdb:db' %}" aria-expanded="false">
-                        <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
-                        <span class="hidden-xs">数据库</span>
-                    </a>
-                </li>
-                {% endif %}
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="overview">
@@ -129,7 +121,7 @@
     <script>
         //获取不同云的主机数量
         var data = {{ overview.clouds_asset_count|safe }};
-        // var data = [{"name": "阿里云", "value": 40}, {"name": "腾讯云", "value": 26}];
+        //var data = [{"name": "阿里云", "value": 40}, {"name": "腾讯云", "value": 26}];
         var legend_data = [];
         var host_nums = 0;
         for(var i=0;i<data.length;i++){
@@ -373,7 +365,18 @@
     <script>
         //标签云
         var word_list = {{ overview.tag_cloud|safe }};
-        //var word_list = [{'text': '数据库', 'weight': 2, 'link': '/assets/hosts/?tag=db'}, {'text': 'WEB服务器', 'weight': 10, 'link': '/assets/hosts/?tag=web'}, {'text': '代理服务器', 'weight': 2, 'link': '/assets/hosts/?tag=proxy'}, {'text': '运维', 'weight': 2, 'link': '/assets/hosts/?tag=devops'}, {'text': '大数据', 'weight': 0, 'link': '/assets/hosts/?tag=spark'}, {'text': '公共', 'weight': 1, 'link': '/assets/hosts/?tag=public'}, {'text': '静态资源', 'weight': 1, 'link': '/assets/hosts/?tag=static'}, {'text': '商城', 'weight': 2, 'link': '/assets/hosts/?tag=mall'}, {'text': '测试环境', 'weight': 7, 'link': '/assets/hosts/?tag=test'}, {'text': 'ERP', 'weight': 14, 'link': '/assets/hosts/?tag=ERP'}, {'text': '财务', 'weight': 3, 'link': '/assets/hosts/?tag=caiwu'}, {'text': 'OMS', 'weight': 7, 'link': '/assets/hosts/?tag=OMS'}];
+        //var word_list = [{'text': '数据库', 'weight': 2, 'link': '/assets/hosts/?tag=db'},
+         {'text': 'WEB服务器', 'weight': 10, 'link': '/assets/hosts/?tag=web'},
+         {'text': '代理服务器', 'weight': 2, 'link': '/assets/hosts/?tag=proxy'},
+         {'text': '运维', 'weight': 2, 'link': '/assets/hosts/?tag=devops'},
+         {'text': '大数据', 'weight': 0, 'link': '/assets/hosts/?tag=spark'},
+         {'text': '公共', 'weight': 1, 'link': '/assets/hosts/?tag=public'},
+         {'text': '静态资源', 'weight': 1, 'link': '/assets/hosts/?tag=static'},
+         {'text': '商城', 'weight': 2, 'link': '/assets/hosts/?tag=mall'},
+         {'text': '测试环境', 'weight': 7, 'link': '/assets/hosts/?tag=test'},
+         {'text': 'ERP', 'weight': 14, 'link': '/assets/hosts/?tag=ERP'},
+         {'text': '财务', 'weight': 3, 'link': '/assets/hosts/?tag=caiwu'},
+         {'text': 'OMS', 'weight': 7, 'link': '/assets/hosts/?tag=OMS'}];
         $("#tag_cloud").jQCloud(word_list);
     </script>
     <script>

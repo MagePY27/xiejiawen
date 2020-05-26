@@ -27,5 +27,5 @@ urlpatterns = [
     re_path('hosts_tags_add/(?P<pk>[0-9]+)?/', HostTagAddView.as_view(), name='host-tags-add'),
     re_path('tags_addhosts/(?P<pk>[0-9]+)?/', HostAddByTagView.as_view(), name='add-hosts'),
     path('update_host_info/', update_host_info, name='update-host-info'),
-    # path('overview/', OverView.as_view(), name='overview'),
+    path('overview/', AssetsOverView.as_view(), name='overview'),
 ]
