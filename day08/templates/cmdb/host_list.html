@@ -1,96 +1,155 @@
-{% extends "base1.html" %}
+{% extends 'base1.html' %}
+{% load static %}
+{% load user_tags %}
 {% block js1 %}
-<link rel="stylesheet" href="/static/assets/magnific-popup/magnific-popup.css"/>
-<link rel="stylesheet" href="/static/assets/jquery-datatables-editable/datatables.css"/>
-{% endblock %}
+<link href="https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table.min.css" rel="stylesheet">
+<link href="static/assets/sweet-alert/sweet-alert.min.css">
+<style>
+        .tag-title {line-height: 30px;padding: 5px 15px;border: 1px solid #e7eaec;border-bottom: none;border-top-left-radius: 4px;border-top-right-radius: 4px;}
+        .tag-title a {float: right}
+        .list-group-item:first-child {border-top-left-radius: 0;border-top-right-radius: 0;}
+        .fixed-table-container {height: auto !important;}
+        .transferBox {height: 100%;border: 1px solid #beb8b8;border-radius: 2px;overflow-y: scroll}
+        .error-msg {color: red}
 
+</style>
+{% endblock %}
+{% block title %}
+主机列表
+{% endblock %}
+{% block page-title %}
+主机列表
+{% endblock %}
 {% block content %}
 <div class="row">
-
     <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">主机列表</h3>
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="m-b-30">
-                            <button id="addToTable" class="btn btn-primary waves-effect waves-light">
-                                <a style="color:white" href="{% url 'cmdb:get_host' %}">刷新列表</a>
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
+        <ul class="nav nav-tabs">
+            {% if perms.cmdb.view_host %}
+            <li class="active">
+                <a href="{% url 'cmdb:hosts' %}" aria-expanded="true">
+                    <span class="visible-xs"><i class="fa fa-server"></i></span>
+                    <span class="hidden-xs">主机</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="hosts">
+                <div class="row" style="margin-bottom: 5px">
+                    {% if perms.cmdb.change_host %}
+                    <div class="col-md-1">
+                        <button id="update-host-info" class="btn btn-primary btn-sm" title="同步阿里云，腾讯云的资产到运维平台">同步资产
+                        </button>
                     </div>
-                    <div class="col-md-4" style="float: right">
+                    {% endif %}
+                    <div class="col-md-2" style="float: right">
                         <form class="form-horizontal" role="form">
                             <div class="input-group">
-                                <input type="text" name="keyword" class="form-control"
-                                       value="{{ keyword|default_if_none:'' }}" placeholder="关键字">
+                                <input type="text" id="keyword" name="keyword" value="{{ keyword|default_if_none:'' }}"
+                                       class="form-control" placeholder="关键字">
                                 <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-effect-ripple btn-primary">搜索</button>
-                                </span>
+                                        <button type="submit" class="btn btn-effect-ripple btn-primary">搜索</button>
+                                        </span>
                             </div>
-                            <br>
                         </form>
                     </div>
                 </div>
-                {% if perms.cmdb.view_host %}
-                <!--                        <table class="table table-bordered table-striped" id="datatable-editable">-->
                 <div class="row">
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>主机名</th>
-                            <th>状态</th>
-                            <th>公网ip</th>
-                            <th>本地ip</th>
-                            <th>过期时间</th>
-                            <th>系统类型</th>
-                            <th>系统版本</th>
-                            <th>内存</th>
-                            <th>cpu数</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for object in object_list %}
-                        <tr>
-                            <td>{{ object.hostname }}</td>
-                            <td>{{ object.status }}</td>
-                            <td>{{ object.public_ip }}</td>
-                            <td>{{ object.private_ip }}</td>
-                            <td>{{ object.expired_time }}</td>
-                            <td>{{ object.os_type }}</td>
-                            <td>{{ object.os_name }}</td>
-                            <td>{{ object.memory }}GB</td>
-                            <td>{{ object.cpu }}核</td>
-                            <td>
-                                <a href="{% url 'cmdb:start_host' object.instance_id %}" class="btn btn-primary btn-xs">开机</a>
-                                <a href="{% url 'cmdb:reboot_host' object.instance_id %}" class="btn btn-warning btn-xs">重启</a>
-                                <a href="{% url 'cmdb:stop_host' object.instance_id %}" class="btn btn-inverse btn-xs">关机</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                    <div class="col-md-2 col-sm-2 col-xs-2">
+                        <div class="tag-title">标签</div>
+                        <div class="list-group">
+                            <a href="{% url 'cmdb:hosts' %}"
+                               class="tag-list list-group-item {% if not slug %}active{% endif %}"><span
+                                    class="badge badge-info">{{ hosts_count }}</span>所有服务器</a>
+                            {% for tag in tags %}
+                            <a href="?tag={{ tag.name }}&keyword={{ keyword|default_if_none:'' }}"
+                               class="list-group-item {% ifequal slug tag.name %}active{% endifequal %}">
+                                {% if tag.host_set.count %}
+                                <span class="badge badge-info">{{ tag.host_set.count }}</span>
+                                {% endif %}
+                                {{ tag.name_cn }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-sm-10 col-xs-10">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th class="text-center">云类型</th>
+                                <th class="text-center">实例名称</th>
+                                <th class="text-center">CPU核数</th>
+                                <th class="text-center">内存大小(GB)</th>
+                                <th class="text-center">私网</th>
+                                <th class="text-center">过期时间</th>
+                                {% if perms.cmdb.change_host %}
+                                <th class="text-center">操作</th>
+                                {% endif %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for host in object_list %}
+                            <tr class=" {{ host.id }}">
+                                <td class="text-center">{{ host.get_public_cloud_display }}</td>
+                                <td class="text-center">{{ host.instance_name }}</td>
+                                <td class="text-center"> {{ host.cpu }}</td>
+                                <td class="text-center"> {{ host.memory }}</td>
+                                <td class="text-center"> {{ host.private_ip }}</td>
+                                <td class="text-center"> {{ host.expired_time }}</td>
+                                {% if perms.cmdb.change_host or perms.cmdb.login_host %}
+                                <td class="text-center">
+                                    {% if perms.cmdb.change_host %}
+                                    <a href="{% url 'cmdb:host-tags-add' host.id %}"
+                                       class="action-link btn btn-success btn-xs">编辑标签</a>
+                                    {% endif %}
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="11" class="text-center">没有主机……</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p style="margin-top: 10px"> 显示 [{{ page_obj.paginator.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 的数据</p>
+                            </div>
+                            <div class="col-md-8">
+                                {% if page_obj.paginator.num_pages > 1 %}
+                                    {% include '_pagination.html' %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                {% endif %}
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <p style="margin-top: 10px"> 显示 [{{ page_obj.paginator.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 的数据</p>
-                </div>
-                <div class="col-md-8">
-                    {% if page_obj.paginator.num_pages > 1 %}
-                    {% include '_pagination.html' %}
-                    {% endif %}
-                </div>
+
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
 
+{% endblock %}
 {% block js2 %}
+<script src="https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="/static/assets/sweet-alert/sweet-alert.min.js"></script>
+<script>
+        $(function () {
+            $('#update-host-info').click(function () {
+                $.get("/cmdb/update_host_info/", function (data) {
+                    console.log(data)
+                    alert(data)
+                    //swal('Good', data, 'success')
+                });
+            })
+        })
+
+</script>
+<script>
+        $('.cmdb').addClass('active');
+        $('.cmdb .assets').addClass('active');
+
+</script>
 {% endblock %}

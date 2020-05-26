@@ -1,0 +1,96 @@
+{% extends "base1.html" %}
+{% block js1 %}
+<link rel="stylesheet" href="/static/assets/magnific-popup/magnific-popup.css"/>
+<link rel="stylesheet" href="/static/assets/jquery-datatables-editable/datatables.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">主机列表</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="m-b-30">
+                            <button id="addToTable" class="btn btn-primary waves-effect waves-light">
+                                <a style="color:white" href="{% url 'cmdb:get_host' %}">刷新列表</a>
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="float: right">
+                        <form class="form-horizontal" role="form">
+                            <div class="input-group">
+                                <input type="text" name="keyword" class="form-control"
+                                       value="{{ keyword|default_if_none:'' }}" placeholder="关键字">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-effect-ripple btn-primary">搜索</button>
+                                </span>
+                            </div>
+                            <br>
+                        </form>
+                    </div>
+                </div>
+                {% if perms.cmdb.view_host %}
+                <!--                        <table class="table table-bordered table-striped" id="datatable-editable">-->
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>主机名</th>
+                            <th>状态</th>
+                            <th>公网ip</th>
+                            <th>本地ip</th>
+                            <th>过期时间</th>
+                            <th>系统类型</th>
+                            <th>系统版本</th>
+                            <th>内存</th>
+                            <th>cpu数</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for object in object_list %}
+                        <tr>
+                            <td>{{ object.hostname }}</td>
+                            <td>{{ object.status }}</td>
+                            <td>{{ object.public_ip }}</td>
+                            <td>{{ object.private_ip }}</td>
+                            <td>{{ object.expired_time }}</td>
+                            <td>{{ object.os_type }}</td>
+                            <td>{{ object.os_name }}</td>
+                            <td>{{ object.memory }}GB</td>
+                            <td>{{ object.cpu }}核</td>
+                            <td>
+                                <a href="{% url 'cmdb:start_host' object.instance_id %}" class="btn btn-primary btn-xs">开机</a>
+                                <a href="{% url 'cmdb:reboot_host' object.instance_id %}" class="btn btn-warning btn-xs">重启</a>
+                                <a href="{% url 'cmdb:stop_host' object.instance_id %}" class="btn btn-inverse btn-xs">关机</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <p style="margin-top: 10px"> 显示 [{{ page_obj.paginator.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 的数据</p>
+                </div>
+                <div class="col-md-8">
+                    {% if page_obj.paginator.num_pages > 1 %}
+                    {% include '_pagination.html' %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js2 %}
+{% endblock %}
