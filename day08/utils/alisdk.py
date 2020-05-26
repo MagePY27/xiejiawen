@@ -69,9 +69,7 @@ class ECSHandler(object):
         else:
             return {str(x['ImageId']): str(x['ImageName']) for x in response['Images']['Image']}
 
-
     def _process_instance_result(self, instance):
-
         if instance['InstanceNetworkType'] == 'vpc':
             public_ip = ",".join(instance['PublicIpAddress']['IpAddress'])
             private_ip = ",".join(instance['VpcAttributes']['PrivateIpAddress']['IpAddress'])
@@ -137,6 +135,7 @@ class ECSHandler(object):
         response = client.do_action_with_exception(request)
         # python2:  print(response)
         print(str(response, encoding='utf-8'))
+
 
 class AliYunRDS:
     def __init__(self, access_key, access_secret, region):

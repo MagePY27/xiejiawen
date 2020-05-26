@@ -1,6 +1,6 @@
 {% extends 'base1.html' %}
 {% block title %}
-    编辑角色
+    编辑组
 {% endblock %}
 {% block js1 %}
     <style>
@@ -18,7 +18,7 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">编辑角色信息</h3>
+                    <h3 class="panel-title">编辑组信息</h3>
                 </div>
                 <div class="panel-body">
                     {% if messages %}
@@ -32,7 +32,7 @@
                       <form class="form-horizontal" role="form" action="" method="post">
                       {% csrf_token %}
                             <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">角色名称：</label>
+                                <label for="inputEmail3" class="col-sm-3 control-label">组名称：</label>
                                 <div class="col-sm-9">
                                   <input type="text" class="form-control" id="inputEmail3" name="name" value="{{ object.name }}" autocomplete="off">
                                 </div>

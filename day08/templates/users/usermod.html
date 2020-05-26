@@ -1,109 +1,117 @@
 {% extends "base1.html" %}
 {% block js1 %}
-        <link rel="shortcut icon" href="/static/img/favicon_1.ico">
+<link rel="shortcut icon" href="/static/img/favicon_1.ico">
 
-        <!-- Bootstrap core CSS -->
-        <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/static/css/bootstrap-reset.css" rel="stylesheet">
+<!-- Bootstrap core CSS -->
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/bootstrap-reset.css" rel="stylesheet">
 
-        <!--Animation css-->
-        <link href="/static/css/animate.css" rel="stylesheet">
+<!--Animation css-->
+<link href="/static/css/animate.css" rel="stylesheet">
 
-        <!--Icon-fonts css-->
-        <link href="/static/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-        <link href="/static/assets/ionicon/css/ionicons.min.css" rel="stylesheet" />
+<!--Icon-fonts css-->
+<link href="/static/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+<link href="/static/assets/ionicon/css/ionicons.min.css" rel="stylesheet"/>
 
-        <!-- Custom styles for this template -->
-        <link href="/static/css/style.css" rel="stylesheet">
-        <link href="/static/css/helper.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="/static/css/style.css" rel="stylesheet">
+<link href="/static/css/helper.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
- <div class="row">
+<div class="row">
 
-                    <div class="col-sm-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading"><h3 class="panel-title">用户修改</h3></div>
-                            <div class="panel-body">
-                                <div class=" form">
-                                    <form class="cmxform form-horizontal tasi-form" id="modefyForm" method="post"
-                                          action="{% url 'users:usermodJsview' object.id %}" novalidate="novalidate">
-                                        <div class="form-group ">
-                                            <label for="username" class="control-label col-lg-2">账号 *</label>
-                                            <div class="col-lg-10">
-                                                <input class=" form-control" id="username" name="username" type="text" value="{{ object.username }}" readonly="readonly">
-                                            </div>
-                                        </div>
-                                        <div class="form-group ">
-                                            <label for="phone" class="control-label col-lg-2">手机  *</label>
-                                            <div class="col-lg-10">
-                                                <input class=" form-control" id="phone" name="phone" type="text" value="{{ object.phone }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-group ">
-                                            <label for="age" class="control-label col-lg-2">年龄  *</label>
-                                            <div class="col-lg-10">
-                                                <input class=" form-control" id="age" name="age" type="text" value="{{ object.age }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-group ">
-                                            <label for="user_type" class="control-label col-lg-2">用户类型 *</label>
-                                            <div class="col-lg-10">
-                                                <input class=" form-control" id="user_type" name="user_type" type="text"
-                                                       value="{{ object.user_type }}" readonly="readonly">
-                                            </div>
-                                        </div>
-                                        <div class="form-group ">
-                                            <label for="sex" class="control-label col-lg-2">性别 *</label>
-                                            <div class="col-lg-10">
-                                                {% if object.sex == 0 %}
-                                                    <input type="radio" name="sex" value=0 checked>男
-                                                    <input type="radio" name="sex" value=1 >女
-                                                    <input type="radio" name="sex" value=2>保密<br>
-                                                    {% elif object.sex == 1 %}
-                                                    <input type="radio" name="sex" value=0 >男
-                                                    <input type="radio" name="sex" value=1 checked>女
-                                                    <input type="radio" name="sex" value=2>保密<br>
-                                                    {% else %}
-                                                    <input type="radio" name="sex" value=0>男
-                                                    <input type="radio" name="sex" value=1>女
-                                                    <input type="radio" name="sex" value=2 checked>保密<br>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        {% if request.user.username == 'admin' %}
-                                        <div class="form-group ">
-                                            <label for="is_active" class="control-label col-lg-2">用户状态 *</label>
-                                            <div class="col-lg-10">
-                                                {% if object.is_active == 0 %}
-                                                    <input type="radio" name="is_active" value=0 checked disabled>禁用
-                                                    {% elif object.is_active == 1 %}
-                                                    <input type="radio" name="is_active" value=1 checked disabled>启用
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        {% endif %}
-                                        <div class="form-group ">
-                                        <label for="agree" class="control-label col-lg-2 col-sm-3">我已确认所填信息 *</label>
-                                        <div class="col-lg-10 col-sm-9">
-                                            <input type="checkbox" style="width: 16px" class="checkbox form-control" id="agree" name="agree">
-                                        </div>
-                                    </div>
-                                        <div class="form-group">
-                                            <div class="col-lg-offset-2 col-lg-10">
-                                                <button class="btn btn-success" type="submit">保存</button>
-                                                <button class="btn btn-default" type="reset">重置</button>
-                                            </div>
-                                        </div>
-                                        {% csrf_token %}
-                                    </form>
-                                </div> <!-- .form -->
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">用户修改</h3></div>
+            <div class="panel-body">
+                <div class=" form">
+                    <form class="cmxform form-horizontal tasi-form" id="modefyForm" method="post"
+                          action="{% url 'users:usermodJsview' object.id %}" novalidate="novalidate">
+                        <div class="form-group ">
+                            <label for="username" class="control-label col-lg-2">账号 *</label>
+                            <div class="col-lg-10">
+                                <input class=" form-control" id="username" name="username" type="text"
+                                       value="{{ object.username }}" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="phone" class="control-label col-lg-2">手机 *</label>
+                            <div class="col-lg-10">
+                                <input class=" form-control" id="phone" name="phone" type="text"
+                                       value="{{ object.phone }}">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="age" class="control-label col-lg-2">年龄 *</label>
+                            <div class="col-lg-10">
+                                <input class=" form-control" id="age" name="age" type="text" value="{{ object.age }}">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="user_type" class="control-label col-lg-2">用户类型 *</label>
+                            <div class="col-lg-10">
+                                {% if object.user_type == 1 %}
+                                <input class=" form-control" id="user_type1" name="user_type" type="text"
+                                       value="权限用户" readonly="readonly">
+                                {% elif object.user_type == 2 %}
+                                <input class=" form-control" id="user_type2" name="user_type" type="text"
+                                       value="普通用户" readonly="readonly">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="sex" class="control-label col-lg-2">性别 *</label>
+                            <div class="col-lg-10">
+                                {% if object.sex == 0 %}
+                                <input type="radio" name="sex" value=0 checked>男
+                                <input type="radio" name="sex" value=1>女
+                                <input type="radio" name="sex" value=2>保密<br>
+                                {% elif object.sex == 1 %}
+                                <input type="radio" name="sex" value=0>男
+                                <input type="radio" name="sex" value=1 checked>女
+                                <input type="radio" name="sex" value=2>保密<br>
+                                {% else %}
+                                <input type="radio" name="sex" value=0>男
+                                <input type="radio" name="sex" value=1>女
+                                <input type="radio" name="sex" value=2 checked>保密<br>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if request.user.username == 'admin' %}
+                        <div class="form-group ">
+                            <label for="is_active" class="control-label col-lg-2">用户状态 *</label>
+                            <div class="col-lg-10">
+                                {% if object.is_active == 0 %}
+                                <input type="radio" name="is_active" value=0 checked disabled>禁用
+                                {% elif object.is_active == 1 %}
+                                <input type="radio" name="is_active" value=1 checked disabled>启用
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="form-group ">
+                            <label for="agree" class="control-label col-lg-2 col-sm-3">我已确认所填信息 *</label>
+                            <div class="col-lg-10 col-sm-9">
+                                <input type="checkbox" style="width: 16px" class="checkbox form-control" id="agree"
+                                       name="agree">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-lg-10">
+                                <button class="btn btn-success" type="submit">保存</button>
+                                <button class="btn btn-default" type="reset">重置</button>
+                            </div>
+                        </div>
+                        {% csrf_token %}
+                    </form>
+                </div> <!-- .form -->
 
-                            </div> <!-- panel-body -->
-                        </div> <!-- panel -->
-                    </div> <!-- col -->
+            </div> <!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col -->
 
-                </div> <!-- End row -->
+</div> <!-- End row -->
 {% endblock %}
 {% block js2 %}
 {% endblock %}
