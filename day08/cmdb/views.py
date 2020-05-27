@@ -21,7 +21,7 @@ import re
 from utils.Aliyun_key import ALICLOUD
 from utils.alisdk import ECSHandler, AliYunRDS
 from .tasks import update_hosts_from_cloud, file, useradd
-
+from .get_overview_data import DataGet
 User = get_user_model()
 
 class IndexView(View):
@@ -244,63 +244,22 @@ class AssetsOverView(LoginRequiredMixin, PermissionRequiredMixin, View):
     permission_required = 'cmdb.change_host'
 
     def get(self, request):
-        aliyun_ecs = ECSHandler(ALICLOUD['access_key_id'], ALICLOUD['access_key'], ALICLOUD['region'])
-        instances = aliyun_ecs.get_instances()[0]
-        # 1.将阿里云主机统计数据加入多云资产的列表[{"name": "阿里云", "value", value}, {"name": "其他云", "value", value}]
-        clouds_asset_count = []
-        clouds_asset_aliyun = {
-            "name": '阿里云',
-            "value": len(instances)
-        }
-        clouds_asset_count.append(clouds_asset_aliyun)
+        # 获取数据
+        data = DataGet()
+        clouds_asset_count = data.get_aliyun_clouds_asset_count()
+        each_type_assets_count = data.get_each_type_assets_count()
+        data_temp = data.get_business_line_host_nums()
+        business_line_host_nums = data_temp["business_line_host_nums"]
+        tag_cloud = data_temp["tag_cloud"]
 
-        # 2.获取每个标签下的主机统计数据，并加入标签-主机统计数据列表[{"name": "标签名", "value": 对应标签的主机数}]
-        business_line_host_nums = []
-        tag_cloud = []
-        tags = list(Tag.objects.all())
-        print("tags:", tags, "number:", len(instances))
-        for tag in tags:
-            # tag_id = tag.id
-            num = len(tag.host_set.all())
-            print(type(tag), num)
-            business_line_host = {
-                "name": tag.name_cn,
-                "value": num
-            }
-            business_line_host_nums.append(business_line_host)
-            # 4.标签云，基于标签下主机数来自动生成权重
-            tag_dict = {
-                "text": tag.name_cn,
-                "weight": num,
-                "link": '/cmdb/hosts/?tag={}'.format(tag.name)
-            }
-            tag_cloud.append(tag_dict)
-            print("标签:", tag_cloud)
-
-        # 3.将主机按服务分类，数据库和服务器
-        each_type_assets_count = []
-        re_ecs = re.compile(r'^ecs.*$')
-        re_rds = re.compile(r'^rds.*$')
-        num_ecs = 0
-        num_rds = 0
-        num_other = 0
-        for instance in instances:
-            if re_ecs.match(instance['instance_type']):
-                num_ecs += 1
-            elif re_rds.match(instances['instance_type']):
-                num_rds += 1
-            else:
-                num_other += 1
-        each_type_assets_count = [{"name": '服务器', "value": num_ecs}, {"name": '数据库', "value": num_rds},
-                                  {"name": '其他', "value": num_other}]
-
-        # 最后，将所有数据统计到大字典overview中
+        # 将所有数据统计到大字典overview中
         overview = {
             "clouds_asset_count": clouds_asset_count,
             "business_line_host_nums": business_line_host_nums,
             "each_type_assets_count": each_type_assets_count,
-            "tag_cloud": tag_cloud,
+            "tag_cloud": tag_cloud
         }
+        # print(overview)
         return render(request, 'cmdb/assets_overview.html', {"overview": overview})
 
 
@@ -318,20 +277,6 @@ def update_host_info(request):
     """
     update_hosts_from_cloud.delay()
     return HttpResponse('任务已提交到后台，请稍等片刻！')
-
-
-@require_GET
-@login_required
-def assets_overview(request):
-    """
-    统计资产
-    :param request:
-    :return:
-    """
-    get_assets_from_cloud.delay()
-    return HttpResponse("请稍后~")
-    pass
-
 
 
 class StopHostView(View):

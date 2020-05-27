@@ -1,101 +1,68 @@
 {% extends 'base1.html' %}
 {% load static %}
 {% block js1 %}
-    <link rel="stylesheet" href="{% static 'assets/jqcloud/jqcloud.css' %}">
-    <style>
+<link rel="stylesheet" href="{% static 'assets/jqcloud/jqcloud.css' %}">
+<style>
         .panel-small{border: 1px solid #DDDDDD;box-shadow: none!important;}
         .panel-small .panel-heading{border-bottom: 1px solid #DDDDDD!important; padding: 15px 30px!important;}
         .panel-small .panel-heading .panel-title{font-size: 14px}
-    </style>
+
+</style>
 {% endblock %}
 {% block title %}
-    资产管理
+资产管理
 {% endblock %}
 {% block page-title %}
-    资产大盘
+资产大盘
 {% endblock %}
 {% block content %}
-    <div class="row">
-        <div class="col-lg-12">
-            <ul class="nav nav-tabs">
-                {% if perms.cmdb.view_host or perms.cmdb.view_database %}
-                <li class="active">
-                    <a href="{% url 'cmdb:overview' %}"  aria-expanded="true">
-                        <span class="visible-xs"><i class="fa fa-home"></i></span>
-                        <span class="hidden-xs">总览</span>
-                    </a>
-                </li>
-                {% endif %}
-                {% if perms.cmdb.view_host %}
-                <li class="">
-                    <a href="{% url 'cmdb:hosts' %}" aria-expanded="false">
-                        <span class="visible-xs"><i class="fa fa-user"></i></span>
-                        <span class="hidden-xs">主机</span>
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="overview">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">保有资产分析</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="panel panel-color panel-default panel-small">
-                                                <div class="panel-heading">
-                                                    <h3 class="panel-title">多云资产分布</h3>
-                                                </div>
-                                                <div class="panel-body">
-                                                    <div id="cloud_assets" style="height:240px;"></div>
-                                                </div>
+<div class="row">
+    <div class="col-lg-12">
+        <ul class="nav nav-tabs">
+            {% if perms.cmdb.view_host or perms.cmdb.view_database %}
+            <li class="active">
+                <a href="{% url 'cmdb:overview' %}" aria-expanded="true">
+                    <span class="visible-xs"><i class="fa fa-home"></i></span>
+                    <span class="hidden-xs">总览</span>
+                </a>
+            </li>
+            {% endif %}
+            {% if perms.cmdb.view_host %}
+            <li class="">
+                <a href="{% url 'cmdb:hosts' %}" aria-expanded="false">
+                    <span class="visible-xs"><i class="fa fa-user"></i></span>
+                    <span class="hidden-xs">主机</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="overview">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">保有资产分析</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-color panel-default panel-small">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title">多云资产分布</h3>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="panel panel-color panel-default panel-small">
-                                                <div class="panel-heading" style="">
-                                                    <h3 class="panel-title">不同类型资产占比</h3>
-                                                </div>
-                                                <div class="panel-body">
-                                                    <div id="each_type_assets" style="height:240px;"></div>
-                                                </div>
+                                            <div class="panel-body">
+                                                <div id="cloud_assets" style="height:240px;"></div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">不同维度资产分析</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="panel panel-color panel-default panel-small">
-                                                <div class="panel-heading">
-                                                    <h3 class="panel-title">各业务线资产占比</h3>
-                                                </div>
-                                                <div class="panel-body">
-                                                     <div id="business_line_assets" style="height:240px;"></div>
-                                                </div>
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-color panel-default panel-small">
+                                            <div class="panel-heading" style="">
+                                                <h3 class="panel-title">不同类型资产占比</h3>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="panel panel-color panel-default panel-small">
-                                                <div class="panel-heading" style="">
-                                                    <h3 class="panel-title">标签云</h3>
-                                                </div>
-                                                <div class="panel-body">
-                                                    <div id="tag_cloud" style="width: 100%; height: 240px;"></div>
-                                                </div>
+                                            <div class="panel-body">
+                                                <div id="each_type_assets" style="height:240px;"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -104,21 +71,55 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane " id="profile">
-                </div>
-                <div class="tab-pane" id="messages">
-                </div>
-                <div class="tab-pane" id="settings">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">不同维度资产分析</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-color panel-default panel-small">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title">各业务线资产占比</h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div id="business_line_assets" style="height:240px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-color panel-default panel-small">
+                                            <div class="panel-heading" style="">
+                                                <h3 class="panel-title">标签云</h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div id="tag_cloud" style="width: 100%; height: 240px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="tab-pane " id="profile">
+            </div>
+            <div class="tab-pane" id="messages">
+            </div>
+            <div class="tab-pane" id="settings">
+            </div>
         </div>
-    </div> <!-- End row -->
+    </div>
+</div> <!-- End row -->
 {% endblock %}
 {% block js2 %}
-    <script src="{% static 'assets/echarts/echarts.min.js' %}"></script>
-    <script src="{% static 'assets/echarts/theme/macarons.js' %}"></script>
-    <script src="{% static 'assets/jqcloud/jqcloud-1.0.4.js' %}"></script>
-    <script>
+<script src="{% static 'assets/echarts/echarts.min.js' %}"></script>
+<script src="{% static 'assets/echarts/macarons.js' %}"></script>
+<script src="{% static 'assets/jqcloud/jqcloud-1.0.4.js' %}"></script>
+<script>
         //获取不同云的主机数量
         var data = {{ overview.clouds_asset_count|safe }};
         //var data = [{"name": "阿里云", "value": 40}, {"name": "腾讯云", "value": 26}];
@@ -199,8 +200,9 @@
             ]
         };
         cloudAssetsChart.setOption(cloudAssetsOption);
-    </script>
-    <script>
+
+</script>
+<script>
         //获取不同类型的主机数量
         var data = {{ overview.each_type_assets_count|safe }};
         //var data = [{'name': '服务器', 'value': 54}, {'name': 'RDS', 'value': 5}, {'name': 'NAS', 'value': 7}]
@@ -281,10 +283,11 @@
             ]
         };
         cloudAssetsChart.setOption(cloudAssetsOption);
-    </script>
-    <script>
+
+</script>
+<script>
         //获取各个业务线的主机数量
-        var data = {{ overview.business_line_host_nums|safe }}
+        var data = {{ overview.business_line_host_nums|safe }};
         //var data = [{'name': '未分配', 'value': 41}, {'name': '商城', 'value': 3}, {'name': '资讯', 'value': 2}, {'name': '客户服务', 'value': 8}];
         var legend_data = [];
         var host_nums = 0;
@@ -361,26 +364,17 @@
             ]
         };
         businessLineAssetsChart.setOption(businessLineAssetsOption);
-    </script>
-    <script>
+
+</script>
+<script>
         //标签云
         var word_list = {{ overview.tag_cloud|safe }};
-        //var word_list = [{'text': '数据库', 'weight': 2, 'link': '/assets/hosts/?tag=db'},
-         {'text': 'WEB服务器', 'weight': 10, 'link': '/assets/hosts/?tag=web'},
-         {'text': '代理服务器', 'weight': 2, 'link': '/assets/hosts/?tag=proxy'},
-         {'text': '运维', 'weight': 2, 'link': '/assets/hosts/?tag=devops'},
-         {'text': '大数据', 'weight': 0, 'link': '/assets/hosts/?tag=spark'},
-         {'text': '公共', 'weight': 1, 'link': '/assets/hosts/?tag=public'},
-         {'text': '静态资源', 'weight': 1, 'link': '/assets/hosts/?tag=static'},
-         {'text': '商城', 'weight': 2, 'link': '/assets/hosts/?tag=mall'},
-         {'text': '测试环境', 'weight': 7, 'link': '/assets/hosts/?tag=test'},
-         {'text': 'ERP', 'weight': 14, 'link': '/assets/hosts/?tag=ERP'},
-         {'text': '财务', 'weight': 3, 'link': '/assets/hosts/?tag=caiwu'},
-         {'text': 'OMS', 'weight': 7, 'link': '/assets/hosts/?tag=OMS'}];
         $("#tag_cloud").jQCloud(word_list);
-    </script>
-    <script>
+
+</script>
+<script>
         $('.cmdb').addClass('active');
         $('.cmdb .assets').addClass('active');
-    </script>
+
+</script>
 {% endblock %}

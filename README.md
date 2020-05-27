@@ -99,10 +99,14 @@ def file():
 ```
 
 **启动celery**
+
 celery -A day08 worker -l info
 python manage.py celery beat
-```
+
 **supervisor管理celery任务**
+```
+
+
 ![这是用户列表](https://github.com/MagePY27/xiejiawen/blob/master/day08/static/pro_picture/user_list.jpg)
 ![这是增加用户](https://github.com/MagePY27/xiejiawen/blob/master/day08/static/pro_picture/user_add.jpg)
 ![这是修改用户](https://github.com/MagePY27/xiejiawen/blob/master/day08/static/pro_picture/user_modefy.jpg)
