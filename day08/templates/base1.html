@@ -27,6 +27,17 @@
         <!-- Custom styles for this template -->
         <link href="{% static 'css/style.css' %}" rel="stylesheet">
         <link href="{% static 'css/helper.css' %}" rel="stylesheet">
+            <script type="text/javascript">
+        /* ==============================================
+             Counter Up
+             =============================================== */
+            jQuery(document).ready(function($) {
+                $('.counter').counterUp({
+                    delay: 100,
+                    time: 1200
+                });
+            });
+        </script>
         {% block js1 %}
         {% endblock %}
     </head>
@@ -75,13 +86,19 @@
                         </ul>
                     </li>
                     {% endif %}
+                    {% if perms.cmdb.view_host %}
                     <li class="has-submenu"><a href="#"><i class="ion-grid"></i> <span class="nav-label">资产管理</span></a>
                         <ul class="list-unstyled">
+                            {% if perms.cmdb.change_tag %}
                             <li><a href="{% url 'cmdb:types' %}">标签类型管理</a></li>
                             <li><a href="{% url 'cmdb:tags' %}">标签管理</a></li>
-                            <li><a href="{% url 'cmdb:hosts' %}">主机列表</a></li>
+                            {% endif %}
+                            {% if perms.cmdb.view_host %}
+                            <li><a href="{% url 'cmdb:overview' %}">资产大盘</a></li>
+                            {% endif %}
                         </ul>
                     </li>
+                    {% endif %}
                 </ul>
             </nav>
 

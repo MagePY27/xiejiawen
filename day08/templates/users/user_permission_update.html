@@ -38,10 +38,8 @@
                                 <div class="col-sm-12" style="padding-left: 0">
                                     {% for perm in permission.list %}
                                         <label class="checkbox-inline" style="margin-bottom: 10px">
-                                            <input type="checkbox" name="user_permissions"
-                                                   value="{{ perm.id }}"
-                                                   {% for permission in object.user_permissions.all %}{% ifequal permission.id perm.id %}checked
-                                                   {% endifequal %}{% endfor %}> {{ perm.name }}
+
+                                            <input type="checkbox" name="user_permissions" value="{{ perm.id }}" {% for permission in object.permissions.all %}{% ifequal permission.id perm.id %}checked {% endifequal %}{% endfor %}>{{ perm.name }}
                                         </label>
                                     {% endfor %}
                                 </div>

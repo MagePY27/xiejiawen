@@ -246,7 +246,7 @@ class AssetsOverView(LoginRequiredMixin, PermissionRequiredMixin, View):
     def get(self, request):
         # 获取数据
         data = DataGet()
-        clouds_asset_count = data.get_aliyun_clouds_asset_count()
+        clouds_asset_count = data.get_aliyun_clouds_asset_count() #每个方法都返回相应的数据列表，子元素为字典
         each_type_assets_count = data.get_each_type_assets_count()
         data_temp = data.get_business_line_host_nums()
         business_line_host_nums = data_temp["business_line_host_nums"]
