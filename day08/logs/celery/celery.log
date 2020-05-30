@@ -36134,3 +36134,28 @@ Traceback (most recent call last):
   File "c:\users\xxjww\pycharmprojects\xiejiawen\venv\lib\site-packages\django\db\models\query.py", line 412, in get
     (self.model._meta.object_name, num)
 cmdb.models.Host.MultipleObjectsReturned: get() returned more than one Host -- it returned 2!
+[2020-05-30 08:36:26,350: WARNING/MainProcess] c:\users\xxjww\pycharmprojects\xiejiawen\venv\lib\site-packages\celery\apps\worker.py:161: CDeprecationWarning: 
+Starting from version 3.2 Celery will refuse to accept pickle by default.
+
+The pickle serializer is a security concern as it may give attackers
+the ability to execute any command.  It's important to secure
+your broker from unauthorized access when using pickle, so we think
+that enabling pickle should require a deliberate action and not be
+the default choice.
+
+If you depend on pickle then you should set a setting to disable this
+warning and to be sure that everything will continue working
+when you upgrade to Celery 3.2::
+
+    CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
+
+You must only enable the serializers that you will actually use.
+
+
+  warnings.warn(CDeprecationWarning(W_PICKLE_DEPRECATED))
+[2020-05-30 08:36:26,812: INFO/MainProcess] Connected to redis://192.168.99.105:6379/0
+[2020-05-30 08:36:26,819: INFO/MainProcess] mingle: searching for neighbors
+[2020-05-30 08:36:27,830: INFO/MainProcess] mingle: all alone
+[2020-05-30 08:36:27,850: WARNING/MainProcess] c:\users\xxjww\pycharmprojects\xiejiawen\venv\lib\site-packages\celery\fixups\django.py:265: UserWarning: Using settings.DEBUG leads to a memory leak, never use this setting in production environments!
+  warnings.warn('Using settings.DEBUG leads to a memory leak, never '
+[2020-05-30 08:36:27,851: WARNING/MainProcess] celery@xiejiawen ready.

@@ -24,6 +24,8 @@ from .tasks import update_hosts_from_cloud, file, useradd
 from .get_overview_data import DataGet
 User = get_user_model()
 
+
+
 class IndexView(View):
 
     def get(self, request):

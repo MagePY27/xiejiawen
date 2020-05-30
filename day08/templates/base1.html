@@ -4,30 +4,30 @@
 
 <!-- Mirrored from coderthemes.com/velonic_3.0/admin_3/{% url 'users:index' %} by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 29 May 2016 14:52:04 GMT -->
 <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
-        <meta name="author" content="Coderthemes">
-        <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon_1.ico' %}" media="screen">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="Coderthemes">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon_1.ico' %}" media="screen">
 
-        <title>{% block title %} {% endblock %}自动化运维平台</title>
+    <title>{% block title %} {% endblock %}自动化运维平台</title>
 
-        <!-- Bootstrap core CSS -->
-        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-        <link href="{% static 'css/bootstrap-reset.css' %}" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-reset.css' %}" rel="stylesheet">
 
-        <!--Animation css-->
-        <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <!--Animation css-->
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
 
-        <!--Icon-fonts css-->
-        <link href="{% static 'assets/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
-        <link href="{% static 'assets/ionicon/css/ionicons.min.css' %}" rel="stylesheet" />
+    <!--Icon-fonts css-->
+    <link href="{% static 'assets/font-awesome/css/font-awesome.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/ionicon/css/ionicons.min.css' %}" rel="stylesheet"/>
 
-        <link href="{% static 'assets/sweet-alert/sweet-alert.min.css' %}" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="{% static 'css/style.css' %}" rel="stylesheet">
-        <link href="{% static 'css/helper.css' %}" rel="stylesheet">
-            <script type="text/javascript">
+    <link href="{% static 'assets/sweet-alert/sweet-alert.min.css' %}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/helper.css' %}" rel="stylesheet">
+    <script type="text/javascript">
         /* ==============================================
              Counter Up
              =============================================== */
@@ -37,134 +37,149 @@
                     time: 1200
                 });
             });
-        </script>
-        {% block js1 %}
-        {% endblock %}
-    </head>
+
+    </script>
+    {% block js1 %}
+    {% endblock %}
+</head>
 
 <body>
-        <!-- Aside Start-->
-        <aside class="left-panel">
+<!-- Aside Start-->
+<aside class="left-panel">
 
-            <!-- brand -->
-            <div class="logo">
-                <a href="{% url 'users:index' %}" class="logo-expanded">
-                    <i class="ion-social-buffer"></i>
-                    <span class="nav-label" >运维平台</span>
-                </a>
-            </div>
-            <!-- / brand -->
+    <!-- brand -->
+    <div class="logo">
+        <a href="{% url 'users:index' %}" class="logo-expanded">
+            <i class="ion-social-buffer"></i>
+            <span class="nav-label">运维平台</span>
+        </a>
+    </div>
+    <!-- / brand -->
 
-            <!-- Navbar Start -->
-            <nav class="navigation">
+    <!-- Navbar Start -->
+    <nav class="navigation">
+        <ul class="list-unstyled">
+            <li class="active"><a href="{% url 'users:index' %}"><i class="ion-home"></i> <span
+                    class="nav-label">仪表盘</span></a></li>
+            {% if perms.users.view_userprofile %}
+            <li class="has-submenu"><a href="#"><i class="ion-settings"></i> <span class="nav-label">用户管理</span><span
+                    class="badge bg-success">1</span></a>
                 <ul class="list-unstyled">
-                    <li class="active"><a href="{% url 'users:index' %}"><i class="ion-home"></i> <span class="nav-label">仪表盘</span></a></li>
-                    {% if perms.users.view_userprofile %}
-                    <li class="has-submenu"><a href="#"><i class="ion-settings"></i> <span class="nav-label">用户管理</span><span class="badge bg-success">1</span></a>
-                        <ul class="list-unstyled">
-                            <li><a href="{% url 'users:userlistJsview' %}">用户列表</a></li>
-                            {% if perms.users.add_userprofile %}
-                            <li><a href="{% url 'users:useraddJsview' %}">创建用户</a></li>
-                            {% endif %}
-                            {% if perms.auth.view_permission %}
-                            <li><a href="{% url 'users:user_permlist' %}">用户权限</a></li>
-                            {% endif %}
-                        </ul>
-                    </li>
+                    <li><a href="{% url 'users:userlistJsview' %}">用户列表</a></li>
+                    {% if perms.users.add_userprofile %}
+                    <li><a href="{% url 'users:useraddJsview' %}">创建用户</a></li>
                     {% endif %}
                     {% if perms.auth.view_permission %}
-                    <li class="has-submenu"><a href="#"><i class="ion-compose"></i> <span class="nav-label">权限管理</span></a>
-                        <ul class="list-unstyled">
-                            <li><a href="{% url 'accounts:permlist' %}">权限列表</a></li>
-                        </ul>
-                    </li>
-                    {% endif %}
-                    {% if perms.auth.view_group %}
-                    <li class="has-submenu"><a href="#"><i class="ion-stats-bars"></i> <span class="nav-label">组管理</span><span class="badge bg-purple">1</span></a>
-                        <ul class="list-unstyled">
-                            <li><a href="{% url 'users:group_list' %}">组列表</a></li>
-                        </ul>
-                    </li>
-                    {% endif %}
-                    {% if perms.cmdb.view_host %}
-                    <li class="has-submenu"><a href="#"><i class="ion-grid"></i> <span class="nav-label">资产管理</span></a>
-                        <ul class="list-unstyled">
-                            {% if perms.cmdb.change_tag %}
-                            <li><a href="{% url 'cmdb:types' %}">标签类型管理</a></li>
-                            <li><a href="{% url 'cmdb:tags' %}">标签管理</a></li>
-                            {% endif %}
-                            {% if perms.cmdb.view_host %}
-                            <li><a href="{% url 'cmdb:overview' %}">资产大盘</a></li>
-                            {% endif %}
-                        </ul>
-                    </li>
+                    <li><a href="{% url 'users:user_permlist' %}">用户权限</a></li>
                     {% endif %}
                 </ul>
-            </nav>
+            </li>
+            {% endif %}
+            {% if perms.auth.view_permission %}
+            <li class="has-submenu"><a href="#"><i class="ion-compose"></i> <span class="nav-label">权限管理</span></a>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'accounts:permlist' %}">权限列表</a></li>
+                </ul>
+            </li>
+            {% endif %}
+            {% if perms.auth.view_group %}
+            <li class="has-submenu"><a href="#"><i class="ion-stats-bars"></i> <span class="nav-label">组管理</span><span
+                    class="badge bg-purple">1</span></a>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'users:group_list' %}">组列表</a></li>
+                </ul>
+            </li>
+            {% endif %}
+            {% if perms.cmdb.view_host %}
+            <li class="has-submenu"><a href="#"><i class="ion-grid"></i> <span class="nav-label">资产管理</span></a>
+                <ul class="list-unstyled">
+                    {% if perms.cmdb.view_host %}
+                    <li><a href="{% url 'cmdb:overview' %}">资产大盘</a></li>
+                    {% endif %}
+                    {% if perms.cmdb.change_tag %}
+                    <li><a href="{% url 'cmdb:types' %}">标签类型管理</a></li>
+                    <li><a href="{% url 'cmdb:tags' %}">标签管理</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
 
-        </aside>
-        <!-- Aside Ends-->
+</aside>
+<!-- Aside Ends-->
 
 
-        <!--Main Content Start -->
-        <section class="content">
-            <!-- Header -->
-            <header class="top-head container-fluid">
-                <button type="button" class="navbar-toggle pull-left">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+<!--Main Content Start -->
+<section class="content">
+    <!-- Header -->
+    <header class="top-head container-fluid">
+        <button type="button" class="navbar-toggle pull-left">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
 
-                <!-- Left navbar -->
-                <nav class=" navbar-default" role="navigation">
-                    <!-- Right navbar -->
-                    <ul class="nav navbar-nav navbar-right top-menu top-right-menu">
+        <!-- Left navbar -->
+        <nav class=" navbar-default" role="navigation">
+            <!-- Right navbar -->
+            <ul class="nav navbar-nav navbar-right top-menu top-right-menu">
 
-                        <!-- user login dropdown start-->
-                        <li class="dropdown text-center">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <img alt="" src="/static/img/avatar-2.jpg" class="img-circle profile-img thumb-sm">
-                                <span class="username">{{ user.username }} </span> <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu pro-menu fadeInUp animated" tabindex="5003" style="overflow: hidden; outline: none;">
-                                <li><a href="{% url 'accounts:pwdmod' user.id %}"><i class="fa fa-briefcase"></i>修改密码</a></li>
-                                <li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> 登出</a></li>
-                            </ul>
-                        </li>
-                        <!-- user login dropdown end -->
+                <!-- user login dropdown start-->
+                <li class="dropdown text-center">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <img alt="" src="/static/img/avatar-2.jpg" class="img-circle profile-img thumb-sm">
+                        <span class="username">{{ user.username }} </span> <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu pro-menu fadeInUp animated" tabindex="5003"
+                        style="overflow: hidden; outline: none;">
+                        <li><a href="{% url 'accounts:pwdmod' user.id %}"><i class="fa fa-briefcase"></i>修改密码</a></li>
+                        <li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> 登出</a></li>
                     </ul>
-                    <!-- End right navbar -->
-                </nav>
+                </li>
+                <!-- user login dropdown end -->
+            </ul>
+            <!-- End right navbar -->
+        </nav>
 
-            </header>
-            <!-- Header Ends -->
+    </header>
+    <!-- Header Ends -->
+    {% block content %}
+    {% endblock %}
+    <!-- Page Content Start -->
+    <div class="wraper container-fluid">
+        <div class="page-title">
+            <h3 class="title">{% block page-title %}{% endblock %}</h3>
+        </div>
+        {% block page-content %}
 
-
-                 {% block content %}
-                 {% endblock %}
-
-            <!-- Footer Start -->
-            <footer class="footer">
-                2020 © 佳文在线抠图.
-            </footer>
-
-            <!-- Footer Ends -->
-        </section>
-        <script src="{% static 'js/jquery.js' %}"></script>
-        <script src="{% static 'js/bootstrap.min.js' %}"></script>
-        <script src="{% static 'js/wow.min.js' %}"></script>
-        <script src="{% static 'js/pace.min.js' %}"></script>
-        <script src="{% static 'js/modernizr.min.js' %}"></script>
-        <script src="{% static 'assets/chat/moment-2.2.1.js' %}"></script>
-        <script src="{% static 'js/jquery.dashboard.js' %}"></script>
-        <!--控制菜单栏点击显示子菜单-->
-        <script src="{% static 'js/jquery.app.js' %}"></script>
-        <!--子菜单点击时，不收缩-->
-        <script src="{% static 'js/jquery.nicescroll.js' %}"></script>
-        {% block js2 %}
         {% endblock %}
+    </div>
+    <!-- Page Content Ends -->
+
+
+
+    <!-- Footer Start -->
+    <footer class="footer">
+        2020 © 佳文在线抠图.
+    </footer>
+
+    <!-- Footer Ends -->
+</section>
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/wow.min.js' %}"></script>
+<script src="{% static 'js/pace.min.js' %}"></script>
+<script src="{% static 'js/modernizr.min.js' %}"></script>
+<script src="{% static 'assets/chat/moment-2.2.1.js' %}"></script>
+<script src="{% static 'js/jquery.dashboard.js' %}"></script>
+<!--控制菜单栏点击显示子菜单-->
+<script src="{% static 'js/jquery.app.js' %}"></script>
+<!--子菜单点击时，不收缩-->
+<script src="{% static 'js/jquery.nicescroll.js' %}"></script>
+{% block js2 %}
+{% endblock %}
 </body>
 </html>
-        <!-- Main Content Ends -->
+<!-- Main Content Ends -->

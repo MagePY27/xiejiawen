@@ -5,7 +5,7 @@ from cmdb.tag import *
 
 app_name='cmdb'
 urlpatterns = [
-    # path('', views.test, name='test'),
+    # path('', test, name='test'),
     path('index/', IndexView.as_view(), name='index'),
 
     path('types/', TypeListView.as_view(), name='types'),

@@ -68,7 +68,7 @@ class DataGet(object):
         for instance in self.instances:
             if re_ecs.match(instance['instance_type']):
                 num_ecs += 1
-            elif re_rds.match(instances['instance_type']):
+            elif re_rds.match(instance['instance_type']):
                 num_rds += 1
             else:
                 num_other += 1
