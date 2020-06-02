@@ -27,18 +27,7 @@
     <!-- Custom styles for this template -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
     <link href="{% static 'css/helper.css' %}" rel="stylesheet">
-    <script type="text/javascript">
-        /* ==============================================
-             Counter Up
-             =============================================== */
-            jQuery(document).ready(function($) {
-                $('.counter').counterUp({
-                    delay: 100,
-                    time: 1200
-                });
-            });
 
-    </script>
     {% block js1 %}
     {% endblock %}
 </head>
@@ -103,6 +92,21 @@
                 </ul>
             </li>
             {% endif %}
+            {% if perms.tasks.view_task %}
+            <li class="has-submenu"><a href="#"><i class="ion-grid"></i> <span class="nav-label">工单管理</span></a>
+                <ul class="list-unstyled">
+                    {% if perms.tasks.view_task %}
+                    <li><a href="{% url 'tasks:task_list' %}">工单列表</a></li>
+                    {% endif %}
+                    {% if perms.tasks.add_task %}
+                    <li><a href="{% url 'tasks:task_add' %}">添加工单</a></li>
+                    {% endif %}
+                    {% if perms.tasks.view_history %}
+                    <li><a href="{% url 'tasks:history' %}">历史工单</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endif %}
         </ul>
     </nav>
 
@@ -145,14 +149,12 @@
 
     </header>
     <!-- Header Ends -->
-    {% block content %}
-    {% endblock %}
     <!-- Page Content Start -->
     <div class="wraper container-fluid">
         <div class="page-title">
             <h3 class="title">{% block page-title %}{% endblock %}</h3>
         </div>
-        {% block page-content %}
+        {% block content %}
 
         {% endblock %}
     </div>
@@ -173,11 +175,28 @@
 <script src="{% static 'js/pace.min.js' %}"></script>
 <script src="{% static 'js/modernizr.min.js' %}"></script>
 <script src="{% static 'assets/chat/moment-2.2.1.js' %}"></script>
-<script src="{% static 'js/jquery.dashboard.js' %}"></script>
+
 <!--控制菜单栏点击显示子菜单-->
 <script src="{% static 'js/jquery.app.js' %}"></script>
 <!--子菜单点击时，不收缩-->
 <script src="{% static 'js/jquery.nicescroll.js' %}"></script>
+    <script type="text/javascript">
+        /* ==============================================
+             Counter Up
+             =============================================== */
+            jQuery(document).ready(function($) {
+                $('.counter').counterUp({
+                    delay: 100,
+                    time: 1200
+                });
+            });
+
+    </script>
+      <script>
+         $.ajaxSetup({
+             data:{csrfmiddlewaretoken:'{{ csrf_token }}'}
+         })
+     </script>
 {% block js2 %}
 {% endblock %}
 </body>

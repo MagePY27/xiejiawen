@@ -29,3 +29,9 @@ def cut(string, length):
     else:
         s = string[:length] + '......'
     return s
+
+
+@register.filter()
+def get_host_names2(queryset):
+    host_names = [host.instance_name for host in queryset]
+    return ','.join(host_names)

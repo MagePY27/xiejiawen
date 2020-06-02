@@ -281,6 +281,24 @@ def update_host_info(request):
     return HttpResponse('任务已提交到后台，请稍等片刻！')
 
 
+@require_GET
+@login_required
+@permission_required(perm='cmdb.view_host')
+def get_host_list(request):
+    """
+    获取主机列表接口，返回json
+    :return:
+    """
+    hosts = Host.objects.all()
+    tag = request.GET.get('tag',"")
+    if tag:
+        hosts = Host.objects.filter(tags__name=tag)
+    host_list = []
+    for host in hosts:
+        host_list.append({'id': str(host.id), 'instance_name': host.instance_name, 'ip':host.private_ip})
+    return JsonResponse({'code': 0, 'msg': '主机获取成功！', 'data': host_list})
+
+
 class StopHostView(View):
     model = Host
 
